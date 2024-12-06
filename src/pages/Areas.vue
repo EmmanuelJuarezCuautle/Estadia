@@ -2,25 +2,28 @@
   <div class="container mt-4">
     <h2 class="letra1">Gestión de Areas</h2>
     <div class="text-left mb-4">
+      <button class="btn btn-add btn-sm" @click="regresar" style="margin-right: 5px;">
+        <i class="fa-solid fa-circle-left" style="margin-right: 10px;"></i> Regresar
+      </button>
       <button class="btn btn-add btn-sm" @click="openForm">
         <i class="fa-solid fa-square-plus" style="margin-right: 10px;"></i> Agregar
-      </button>
+    </button>
     </div>
     <div v-if="showForm" class="modal-overlay" @click.self="cancelForm">
       <div class="card modal-content">
         <div class="card-header">
-          <h4 class="mb-4">{{ editMode ? 'Editar Agencia' : 'Agregar Agencia' }}</h4>
+          <h4 class="mb-4">{{ editMode ? 'Editar Area' : 'Agregar Area' }}</h4>
         </div>
         <div class="card-body">
           <form @submit.prevent="guardarAgencia">
             <div class="form-group">
-              <label for="nombre_area">Nombre Agencia</label>
+              <label for="nombre_area">Nombre Area</label>
               <input 
                 type="text"
                 id="nombre_area"
                 v-model="formData.nombre_area"
                 class="form-control"
-                placeholder="Nombre de la agencia"
+                placeholder="Nombre de la area"
                 required
               />
             </div>
@@ -115,17 +118,17 @@ export default {
         this.fetchAreas();
         this.cancelForm();
       } catch (error) {
-        console.error("Error al guardar la agencia:", error);
+        console.error("Error al guardar la area:", error);
       }
     },
     // Eliminar una agencia
     async eliminarAgencia(id_area) {
-      if (confirm("¿Estás seguro de eliminar esta depto?")) {
+      if (confirm("¿Estás seguro de eliminar esta area?")) {
         try {
           await axios.delete(`${apiUrl}/area/${id_area}`);
           this.fetchAreas();
         } catch (error) {
-          console.error("Error al eliminar la departamento:", error);
+          console.error("Error al eliminar la area:", error);
         }
       }
     },
@@ -152,6 +155,9 @@ export default {
       this.formData = { ...agency }; // Asignar los datos de la agencia al formulario
       this.showForm = true;
       this.editMode = true;
+    },
+    regresar() {
+      this.$router.push({ path: 'datosgenerales'});
     },
   },
 };

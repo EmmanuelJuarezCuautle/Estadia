@@ -1,11 +1,13 @@
 <template>
   <div class="container mt-4">
     <h2 class="letra1">Gestión de Agencias</h2>
-    <div class="text-left mb-4">
+    <button class="btn btn-add btn-sm" @click="regresar" style="margin-right: 5px;">
+        <i class="fa-solid fa-circle-left" style="margin-right: 10px;"></i> Regresar
+      </button>
       <button class="btn btn-add btn-sm" @click="openForm">
         <i class="fa-solid fa-square-plus" style="margin-right: 10px;"></i> Agregar
-      </button>
-    </div>
+    </button>
+
     <div v-if="showForm" class="modal-overlay" @click.self="cancelForm">
       <div class="card modal-content">
         <div class="card-header">
@@ -155,6 +157,9 @@ export default {
       this.formData = { ...agency }; // Asignar los datos de la agencia al formulario
       this.showForm = true;
       this.editMode = true;
+    },
+    regresar() {
+      this.$router.push({ path: 'datosgenerales'});
     },
   },
 };

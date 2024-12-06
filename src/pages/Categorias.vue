@@ -2,25 +2,28 @@
   <div class="container mt-4">
     <h2 class="letra1">Gestión de Categorias</h2>
     <div class="text-left mb-4">
+      <button class="btn btn-add btn-sm" @click="regresar" style="margin-right: 5px;">
+        <i class="fa-solid fa-circle-left" style="margin-right: 10px;"></i> Regresar
+      </button>
       <button class="btn btn-add btn-sm" @click="openForm">
         <i class="fa-solid fa-square-plus" style="margin-right: 10px;"></i> Agregar
-      </button>
+    </button>
     </div>
     <div v-if="showForm" class="modal-overlay" @click.self="cancelForm">
       <div class="card modal-content">
         <div class="card-header">
-          <h4 class="mb-4">{{ editMode ? 'Editar Agencia' : 'Agregar Agencia' }}</h4>
+          <h4 class="mb-4">{{ editMode ? 'Editar Categoria' : 'Agregar Categoria' }}</h4>
         </div>
         <div class="card-body">
           <form @submit.prevent="guardarAgencia">
             <div class="form-group">
-              <label for="nombre_catego">Nombre Agencia</label>
+              <label for="nombre_catego">Nombre Categoria</label>
               <input 
                 type="text"
                 id="nombre_catego"
                 v-model="formData.nombre_catego"
                 class="form-control"
-                placeholder="Nombre de la agencia"
+                placeholder="Nombre de la categoria"
                 required
               />
             </div>
@@ -114,12 +117,12 @@ export default {
         this.fetchAgencias();
         this.cancelForm();
       } catch (error) {
-        console.error("Error al guardar la agencia:", error);
+        console.error("Error al guardar la categoria:", error);
       }
     },
     // Eliminar una agencia
     async eliminarAgencia(id) {
-      if (confirm("¿Estás seguro de eliminar esta depto?")) {
+      if (confirm("¿Estás seguro de eliminar esta categoria?")) {
         try {
           await axios.delete(`${apiUrl}/categoria/${id}`);
           this.fetchAgencias();
@@ -152,6 +155,10 @@ export default {
       this.showForm = true;
       this.editMode = true;
     },
+    regresar() {
+      this.$router.push({ path: 'datosgenerales'});
+    },
+  
   },
 };
 </script>

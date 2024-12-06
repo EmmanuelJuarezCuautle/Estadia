@@ -2,15 +2,15 @@
   <div class="wrapper">
     <side-bar>
       <mobile-menu slot="content"></mobile-menu>
-      <sidebar-link to="/admin/overview">
+      <sidebar-link to="/admin/panel">
         <i class="nc-icon nc-chart-pie-36"></i>
         <p>Panel</p>
       </sidebar-link>
-      <sidebar-link to="/admin/icons">
+      <sidebar-link to="/admin/datosgenerales">
         <i class="nc-icon nc-bullet-list-67"></i>
         <p>Datos generales</p>
       </sidebar-link>
-      <sidebar-link to="/admin/typography">
+      <sidebar-link to="/admin/equipos">
         <i class="nc-icon nc-tv-2"></i>
         <p>Equipos</p>
       </sidebar-link>
@@ -19,20 +19,17 @@
         <i class="nc-icon nc-single-copy-04"></i>
         <p>Control General</p>
       </sidebar-link> -->
-      <sidebar-link to="/admin/table-list">
+      <sidebar-link to="/admin/mantenimiento">
         <i class="nc-icon nc-settings-90"></i>
         <p>Mantenimientos</p>
       </sidebar-link>
       
       
-      <sidebar-link to="/admin/maps">
+      <sidebar-link to="/admin/admin">
         <i class="nc-icon nc-circle-09"></i>
         <p>Administradores</p>
       </sidebar-link>
-      <sidebar-link to="/admin/notifications">
-        <i class="nc-icon nc-bell-55"></i>
-        <p>Control general</p>
-      </sidebar-link>
+
     </side-bar>
     <div class="main-panel">
       <top-navbar></top-navbar>

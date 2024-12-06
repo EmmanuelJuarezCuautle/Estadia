@@ -1,329 +1,163 @@
 <template>
-    <div>
-      <div class="wrapper fadeInDown">
-        <div id="formContent">
-          <!-- Icon -->
-          <div class="fadeIn first">
-            <img src="../public/img/vue-logo-login.png" id="icon" alt="User Icon" />
-          </div>
-  
-          <!-- Login Form -->
-          <form v-on:submit.prevent="login">
-            <input type="text" id="login" class="fadeIn second" name="login" placeholder="correo_admin" v-model="correo_admin" />
-            <input type="password" id="password" class="fadeIn third" name="login" placeholder="Password" v-model="password" />
-            <input type="submit" class="fadeIn fourth" value="Log In" />
-          </form>
-  
-          <!-- Error Message -->
-          <div class="alert alert-danger" role="alert" v-if="error">{{ message }}</div>
-        </div>
+  <div class="login-container">
+    <div class="login-box">
+      <!-- Header -->
+      <h2>Iniciar Sesión</h2>
+
+      <!-- Icon -->
+      <div class="login-icon">
+        <img src="../public/img/vue-logo-login.png" alt="User Icon" />
+      </div>
+
+      <!-- Login Form -->
+      <form v-on:submit.prevent="login">
+        <input 
+          type="text" 
+          placeholder="Correo electrónico" 
+          v-model="correo_admin" 
+          class="input-field" 
+        />
+        <input 
+          type="password" 
+          placeholder="Contraseña" 
+          v-model="password" 
+          class="input-field" 
+        />
+        <button type="submit" class="login-btn">Ingresar</button>
+      </form>
+
+      <!-- Error Message -->
+      <div class="error-message" v-if="error">
+        {{ message }}
       </div>
     </div>
-  </template>
-  
-  <script>
-  import axios from 'axios';
-  import { API_BASE_URL } from "@/config";
-  const apiUrl = API_BASE_URL;
-  
-  export default {
-    data() {
-      return {
-        correo_admin: '',
-        password: '',
-        error: false,
-        message: '',
+  </div>
+</template>
+
+<script>
+import axios from "axios";
+import { API_BASE_URL } from "@/config";
+const apiUrl = API_BASE_URL;
+
+export default {
+  data() {
+    return {
+      correo_admin: "",
+      password: "",
+      error: false,
+      message: "",
+    };
+  },
+  methods: {
+    login() {
+      const json = {
+        correo_admin: this.correo_admin,
+        password: this.password,
       };
-    },
-    methods: {
-      login() {
-        const json = {
-          correo_admin: this.correo_admin,
-          password: this.password,
-        };
-        axios
-          .post(`${apiUrl}/login`, json)
-          .then((response) => {
-            if (response.data.status === 'ok') {
-              // Login exitoso, redirigir al dashboard
-              this.$router.push('/admin/overview');
-            } else {
-              // Mostrar mensaje de error
-              this.error = true;
-              this.message = response.data.message;
-            }
-          })
-          .catch((error) => {
-            console.error(error);
+      axios
+        .post(`${apiUrl}/login`, json)
+        .then((response) => {
+          if (response.data.status === "ok") {
+            this.$router.push("/admin/panel");
+          } else {
             this.error = true;
-            this.message = 'Hubo un error al intentar hacer login';
-          });
-      },
+            this.message = response.data.message;
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          this.error = true;
+          this.message = "Hubo un error al intentar hacer login";
+        });
     },
-  };
-  </script>
-  
+  },
+};
+</script>
+
 <style scoped>
-/* BASIC */
-
-html {
-  background-color: #56baed;
-}
-
+/* General Styles */
 body {
   font-family: "Poppins", sans-serif;
+  background-color: #f3f4f6;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 100vh;
 }
 
-a {
-  color: #92badd;
-  display:inline-block;
-  text-decoration: none;
-  font-weight: 400;
-}
-
-h2 {
-  text-align: center;
-  font-size: 16px;
-  font-weight: 600;
-  text-transform: uppercase;
-  display:inline-block;
-  margin: 40px 8px 10px 8px; 
-  color: #cccccc;
-}
-
-
-
-/* STRUCTURE */
-
-.wrapper {
+.login-container {
   display: flex;
-  align-items: center;
-  flex-direction: column; 
   justify-content: center;
+  align-items: center;
+  height: 100%;
   width: 100%;
-  min-height: 100%;
-  padding: 20px;
+  padding: 40px;
+  background: linear-gradient(135deg, #56baed, #39ace7);
 }
 
-#formContent {
-  -webkit-border-radius: 10px 10px 10px 10px;
-  border-radius: 10px 10px 10px 10px;
+.login-box {
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 500px; /* Ajustado para hacerlo más grande */
+  padding: 40px; /* Espacio interno mayor */
+  text-align: center;
+}
+
+.login-box h2 {
+  font-size: 2rem; /* Aumentado */
+  margin-bottom: 30px; /* Más espacio debajo */
+  color: #333;
+}
+
+.login-icon img {
+  width: 200px; /* Icono más grande */
+  margin-bottom: 20px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 18px; /* Aumentado */
+  margin: 15px 0; /* Más espacio entre campos */
+  border: 1px solid #ddd;
+  border-radius: 8px; /* Bordes más redondeados */
+  font-size: 1.1rem; /* Texto más grande */
+  background: #f9f9f9;
+}
+
+.input-field:focus {
+  border-color: #56baed;
+  outline: none;
   background: #fff;
-  padding: 30px;
-  width: 90%;
-  max-width: 450px;
-  position: relative;
-  padding: 0px;
-  -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
-  box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
-  text-align: center;
 }
 
-#formFooter {
-  background-color: #f6f6f6;
-  border-top: 1px solid #dce8f1;
-  padding: 25px;
-  text-align: center;
-  -webkit-border-radius: 0 0 10px 10px;
-  border-radius: 0 0 10px 10px;
-}
-
-
-
-/* TABS */
-
-h2.inactive {
-  color: #cccccc;
-}
-
-h2.active {
-  color: #0d0d0d;
-  border-bottom: 2px solid #5fbae9;
-}
-
-
-
-/* FORM TYPOGRAPHY*/
-
-input[type=button], input[type=submit], input[type=reset]  {
+.login-btn {
+  width: 100%;
+  padding: 18px; /* Más alto */
   background-color: #56baed;
+  color: #ffffff;
   border: none;
-  color: white;
-  padding: 15px 80px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  text-transform: uppercase;
-  font-size: 13px;
-  -webkit-box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
-  box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
-  -webkit-border-radius: 5px 5px 5px 5px;
-  border-radius: 5px 5px 5px 5px;
-  margin: 5px 20px 40px 20px;
-  -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-  -ms-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
+  border-radius: 8px;
+  font-size: 1.2rem; /* Texto más grande */
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover  {
+.login-btn:hover {
   background-color: #39ace7;
 }
 
-input[type=button]:active, input[type=submit]:active, input[type=reset]:active  {
-  -moz-transform: scale(0.95);
-  -webkit-transform: scale(0.95);
-  -o-transform: scale(0.95);
-  -ms-transform: scale(0.95);
-  transform: scale(0.95);
+.error-message {
+  margin-top: 20px;
+  padding: 12px;
+  background-color: #ffdddd;
+  color: #d8000c;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  font-size: 1rem;
 }
-
-input[type=text] {
-  background-color: #f6f6f6;
-  border: none;
-  color: #0d0d0d;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 5px;
-  width: 85%;
-  border: 2px solid #f6f6f6;
-  -webkit-transition: all 0.5s ease-in-out;
-  -moz-transition: all 0.5s ease-in-out;
-  -ms-transition: all 0.5s ease-in-out;
-  -o-transition: all 0.5s ease-in-out;
-  transition: all 0.5s ease-in-out;
-  -webkit-border-radius: 5px 5px 5px 5px;
-  border-radius: 5px 5px 5px 5px;
-}
-
-input[type=text]:focus {
-  background-color: #fff;
-  border-bottom: 2px solid #5fbae9;
-}
-
-input[type=text]:placeholder {
-  color: #cccccc;
-}
-
-
-
-/* ANIMATIONS */
-
-/* Simple CSS3 Fade-in-down Animation */
-.fadeInDown {
-  -webkit-animation-name: fadeInDown;
-  animation-name: fadeInDown;
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-}
-
-@-webkit-keyframes fadeInDown {
-  0% {
-    opacity: 0;
-    -webkit-transform: translate3d(0, -100%, 0);
-    transform: translate3d(0, -100%, 0);
-  }
-  100% {
-    opacity: 1;
-    -webkit-transform: none;
-    transform: none;
-  }
-}
-
-@keyframes fadeInDown {
-  0% {
-    opacity: 0;
-    -webkit-transform: translate3d(0, -100%, 0);
-    transform: translate3d(0, -100%, 0);
-  }
-  100% {
-    opacity: 1;
-    -webkit-transform: none;
-    transform: none;
-  }
-}
-
-/* Simple CSS3 Fade-in Animation */
-@-webkit-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-@-moz-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-
-.fadeIn {
-  opacity:0;
-  -webkit-animation:fadeIn ease-in 1;
-  -moz-animation:fadeIn ease-in 1;
-  animation:fadeIn ease-in 1;
-
-  -webkit-animation-fill-mode:forwards;
-  -moz-animation-fill-mode:forwards;
-  animation-fill-mode:forwards;
-
-  -webkit-animation-duration:1s;
-  -moz-animation-duration:1s;
-  animation-duration:1s;
-}
-
-.fadeIn.first {
-  -webkit-animation-delay: 0.4s;
-  -moz-animation-delay: 0.4s;
-  animation-delay: 0.4s;
-}
-
-.fadeIn.second {
-  -webkit-animation-delay: 0.6s;
-  -moz-animation-delay: 0.6s;
-  animation-delay: 0.6s;
-}
-
-.fadeIn.third {
-  -webkit-animation-delay: 0.8s;
-  -moz-animation-delay: 0.8s;
-  animation-delay: 0.8s;
-}
-
-.fadeIn.fourth {
-  -webkit-animation-delay: 1s;
-  -moz-animation-delay: 1s;
-  animation-delay: 1s;
-}
-
-/* Simple CSS3 Fade-in Animation */
-.underlineHover:after {
-  display: block;
-  left: 0;
-  bottom: -10px;
-  width: 0;
-  height: 2px;
-  background-color: #56baed;
-  content: "";
-  transition: width 0.2s;
-}
-
-.underlineHover:hover {
-  color: #0d0d0d;
-}
-
-.underlineHover:hover:after{
-  width: 100%;
-}
-
-
-
-/* OTHERS */
-
-*:focus {
-    outline: none;
-} 
-
-#icon {
-  width:60%;
-}
-
 </style>
+

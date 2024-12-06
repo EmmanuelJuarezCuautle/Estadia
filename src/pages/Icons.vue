@@ -48,7 +48,7 @@ export default {
         { path: "/admin/ram", name: "Memoria RAM", icon: "fa-solid fa-memory" },
         { path: "/admin/antivirus", name: "Antivirus", icon: "fa-solid fa-shield-alt" },
         { path: "/admin/office", name: "Office", icon: "fa-solid fa-file-alt" },
-        { path: "/admin/deptoarea", name: "DeptoArea", icon: "fa-solid fa-file-alt" },
+        { path: "/admin/deptoarea", name: "Departamento - Area", icon: "fa-solid fa-file-alt" },
         //{ path: "/admin/administradores", name: "Administradores", icon: "fa-solid fa-user-alt" }
       ]
     };

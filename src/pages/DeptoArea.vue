@@ -1,15 +1,18 @@
 <template>
   <div class="container mt-4">
-    <h2 class="letra1">Gestión de Categorias</h2>
+    <h2 class="letra1">Gestión de Departamentos y Areas</h2>
     <div class="text-left mb-4">
+      <button class="btn btn-add btn-sm" @click="regresar" style="margin-right: 5px;">
+        <i class="fa-solid fa-circle-left" style="margin-right: 10px;"></i> Regresar
+      </button>
       <button class="btn btn-add btn-sm" @click="openForm">
         <i class="fa-solid fa-square-plus" style="margin-right: 10px;"></i> Agregar
-      </button>
+    </button>
     </div>
     <div v-if="showForm" class="modal-overlay" @click.self="cancelForm">
       <div class="card modal-content">
         <div class="card-header">
-          <h4 class="mb-4">{{ editMode ? 'Editar Departamento' : 'Agregar Departamento' }}</h4>
+          <h4 class="mb-4">{{ editMode ? 'Editar Departamento Area' : 'Agregar Departamento Area' }}</h4>
         </div>
 
         <div class="card-body">
@@ -218,6 +221,8 @@ export default {
     getAreaNombre(id_area) {
       return this.areas[id_area] || "Desconocido";
     },
+
+    //-------------------------------------------------------------
     async guardarDepartamento() {
       try {
         if (this.formData.id_dep_area) {
@@ -263,6 +268,9 @@ export default {
       this.showForm = true;
       this.editMode = true;
       this.filterAreas();
+    },
+    regresar() {
+      this.$router.push({ path: 'datosgenerales'});
     },
   },
 };

@@ -44,11 +44,11 @@ const routes = [
   {
     path: '/admin',
     component: DashboardLayout,
-    redirect: '/admin/overview',
+    redirect: '/admin/panel',
     children: [
       {
-        path: 'overview',
-        name: 'Overview',
+        path: 'panel',
+        name: 'panel',
         component: Overview
       },
       {
@@ -57,18 +57,18 @@ const routes = [
         component: UserProfile
       },
       {
-        path: 'table-list',
-        name: 'Table List',
+        path: 'mantenimiento',
+        name: 'Mantenimiento',
         component: TableList
       },
       {
-        path: 'typography',
-        name: 'Typography',
+        path: 'equipos',
+        name: 'equipos',
         component: Typography
       },
       {
-        path: 'icons',  // Cambié la ruta base a 'icons'
-        name: 'Icons',
+        path: 'datosgenerales',  // Cambié la ruta base a 'icons'
+        name: 'datosgenerales',
         component: Icons,
       },
       {
@@ -148,8 +148,8 @@ const routes = [
         component: DeptoArea,
       },
       {
-        path: 'maps',
-        name: 'Maps',
+        path: 'admin',
+        name: 'admin',
         component: Maps
       },
       {

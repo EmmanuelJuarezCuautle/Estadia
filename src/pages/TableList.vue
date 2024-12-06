@@ -117,13 +117,13 @@
         <thead class="thead-dark">
           <tr>
             <th scope="col" style="width: 5%">#</th>
-            <th scope="col" style="width: 30%">Tipo Mant</th>
-            <th scope="col" style="width: 30%">Admin</th>
-            <th scope="col" style="width: 35%">Número de Serie</th>
-            <th scope="col" style="width: 35%">Empleado</th>
-            <th scope="col" style="width: 35%">Agencia</th>
-            <th scope="col" style="width: 35%">Acciones</th>
-          </tr>
+            <th scope="col" style="width: 15%">Tipo Mant</th>
+            <th scope="col" style="width: 10%">Admin</th>
+            <th scope="col" style="width: 15%">Número de Serie</th>
+            <th scope="col" style="width: 10%">Empleado</th>
+            <th scope="col" style="width: 15%">Agencia</th>
+            <th scope="col" style="width: 30%">Acciones</th>
+        </tr>
         </thead>
         <tbody>
           <tr
@@ -148,6 +148,7 @@
                 ></i>
                 Editar
               </button>
+              
               <button
                 class="btn btn-danger btn-sm"
                 style="width: 100px"
