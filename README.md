@@ -1,66 +1,42 @@
-# [Vue Light Bootstrap Dashboard](http://vuejs.creative-tim.com/vue-light-bootstrap-dashboard) [![version][version-badge]][changelog] [![license][license-badge]][license]
+# Frontend Sistema de Gestion de Equipos de cómputo
 
-> Admin dashboard based on light bootstrap dashboard UI template + vue-router
+> Dashboard con bootstrap dashboard UI template + vue-router
 
-This project is a vue version of [Light bootstrap dashboard](https://www.creative-tim.com/product/light-bootstrap-dashboard)
-designed for vue js. The dashboard includes Bootstrap 4, vue-router, chartist, google-maps and several other plugins/components.
+![](Dashboard2.PNG)
 
-Check the [Live Demo here](http://vuejs.creative-tim.com/vue-light-bootstrap-dashboard).
 
-![](public/Dashboard.PNG)
-
-## :rocket: Getting started
-
-Vue Light Bootstrap Dashboard is built on top of Bootstrap 4, Vuejs and Vue-router. To get started do the following steps:
-
-1. Download the project
-2. Make sure you have node.js (https://nodejs.org/en/) installed
-3. Type `npm install` in the source folder where `package.json` is located
-4. Type `npm run dev` to start the development server
-
-The repo uses [vue-cli](https://github.com/vuejs/vue-cli) scaffolding which takes care of the development setup with webpack and all the necessary modern tools to make web development faster and easier.
-
-## Deploy
-
-:rocket: You can deploy your own version of the template to Genezio with one click:
-
-[![Deploy to Genezio](https://raw.githubusercontent.com/Genez-io/graphics/main/svg/deploy-button.svg)](https://app.genez.io/start/deploy?repository=https://github.com/creativetimofficial/vue-light-bootstrap-dashboard&utm_source=github&utm_medium=referral&utm_campaign=github-creativetim&utm_term=deploy-project&utm_content=button-head)
-
-## [Documentation](https://demos.creative-tim.com/vue-light-bootstrap-dashboard/documentation/#/buttons)
+## Development
 
 ## :cloud: Build Setup
 
-### install dependencies
+### Instalar dependencias
 
 `npm install`
 
-### serve with hot reload at localhost:8000
+### serve con recarga activa en localhost:8000
 
 `npm run dev`
 
-### build for production with minification
+### Construir para producción con minimización
 
 `npm run build`
 
-### run unit tests
+### Ejecutar pruebas unitarias
 
 `npm run unit`
 
-### run and watch unit tests
+### Ejecutar y observar pruebas unitarias
 
 `npm run unit:watch`
 
-## :clipboard: Contribution guide
+## :clipboard: Guía de contribución
 
-- `npm install` or `yarn install`
-- Please don't use jQuery or jQuery based plugins since there are many pure Vue alternatives
-
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+- `npm install` ó `yarn install`
+- No utilice jQuery ni complementos basados ​​en jQuery, ya que existen muchas alternativas puras de Vue
+- 
+Para obtener una explicación detallada sobre cómo funcionan las cosas, consulte la [guía](http://vuejs-templates.github.io/webpack/) y la [documentación de vue-loader](http://vuejs.github.io/vue-loader).
 
 [changelog]: ./CHANGELOG.md
 [license]: ./LICENSE.md
 [version-badge]: https://img.shields.io/badge/version-2.1.0-blue.svg
 [license-badge]: https://img.shields.io/badge/license-MIT-blue.svg
-# FrontEndStella
-# FrontEndStella
-# FrontEndStella
