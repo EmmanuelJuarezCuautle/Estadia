@@ -49,33 +49,60 @@
         </div>
       </div>
     </div>
-    <div class="table-responsive">
-      <table class="table table-striped table-hover text-center">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col" style="width: 5%;">#</th>
-            <th scope="col" style="width: 60%;">Departamento</th>
-            <th scope="col" style="width: 60%;">Areas</th>
-            <th scope="col" style="width: 35%;">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="deptoarea in deptosareas" :key="deptoarea.id_dep_area">
-            <td>{{ deptoarea.id_dep_area }}</td>
-            <td>{{ getDepartamentoNombre(deptoarea.id_depto) }}</td>
-            <td>{{ getAreaNombre(deptoarea.id_area) }}</td>
-            <td class="td-actions">
-              <button class="btn btn-warning btn-sm" style="width: 100px; margin-left: 30px; margin-right: 30px;" @click="editAgency(deptoarea)">
-                <i class="fa-solid fa-pen-to-square" style="margin-right: 10px;"></i> Editar
-              </button>
-              <button class="btn btn-danger btn-sm" style="width: 100px;" @click="eliminarAgencia(deptoarea.id_dep_area)">
-                <i class="fa-solid fa-trash" style="margin-right: 10px;"></i> Eliminar
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+
+        <!-- Filtros -->
+    <div class="filters mb-4 row">
+      <!-- Filtro por Departamento -->
+      <div class="col-md-2">
+        <select v-model="filters.departamento" class="form-control">
+          <option value="">Todos los Departamentos</option>
+          <option v-for="(nombre, id) in departamentos" :key="id" :value="id">
+            {{ nombre }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Filtro por Área -->
+      <div class="col-md-2">
+        <select v-model="filters.area" class="form-control">
+          <option value="">Todas las Áreas</option>
+          <option v-for="(nombre, id) in areas" :key="id" :value="id">
+            {{ nombre }}
+          </option>
+        </select>
+      </div>
     </div>
+
+    <!-- Tabla Principal -->
+<div class="table-responsive">
+  <table class="table table-striped table-hover text-center">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col" style="width: 5%;">#</th>
+        <th scope="col" style="width: 60%;">Departamento</th>
+        <th scope="col" style="width: 60%;">Áreas</th>
+        <th scope="col" style="width: 35%;">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="deptoarea in filteredDeptosAreas" :key="deptoarea.id_dep_area">
+        <td>{{ deptoarea.id_dep_area }}</td>
+        <td>{{ getDepartamentoNombre(deptoarea.id_depto) }}</td>
+        <td>{{ getAreaNombre(deptoarea.id_area) }}</td>
+        <td class="td-actions">
+          <button class="btn btn-warning btn-sm" style="width: 100px; margin-left: 30px; margin-right: 30px;" @click="editAgency(deptoarea)">
+            <i class="fa-solid fa-pen-to-square" style="margin-right: 10px;"></i> Editar
+          </button>
+          <button class="btn btn-danger btn-sm" style="width: 100px;" @click="eliminarAgencia(deptoarea.id_dep_area)">
+            <i class="fa-solid fa-trash" style="margin-right: 10px;"></i> Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
   </div>
 </template>
 
@@ -92,6 +119,10 @@ export default {
       deptosareas: [],
       departamentos: {},
       areas: {},
+      filters: {
+        departamento: "",
+        area: "",
+      },
       formData: {
         id_dep_area: null,
         id_depto: "",
@@ -100,6 +131,17 @@ export default {
       filteredAreas: {},
     };
   },
+  computed: {
+    // Filtro de departamentos y áreas
+    filteredDeptosAreas() {
+      return this.deptosareas.filter(deptoarea => {
+        return (
+          (!this.filters.departamento || parseInt(deptoarea.id_depto) === parseInt(this.filters.departamento)) &&
+          (!this.filters.area || parseInt(deptoarea.id_area) === parseInt(this.filters.area))
+        );
+      });
+    },
+  },
   mounted() {
     this.fetchDepartamentos();
     this.fetchAreas();
@@ -107,51 +149,50 @@ export default {
   },
   methods: {
     async guardarDepartamento() {
-  try {
-    // Validar que los campos requeridos no estén vacíos
-    if (!this.formData.id_depto) {
-      alert("El campo 'Departamento' es obligatorio.");
-      return;
-    }
+    try {
+      // Validar que los campos requeridos no estén vacíos
+      if (!this.formData.id_depto) {
+        alert("El campo 'Departamento' es obligatorio.");
+        return;
+      }
 
-    if (!this.formData.id_area) {
-      alert("El campo 'Área' es obligatorio.");
-      return;
-    }
+      if (!this.formData.id_area) {
+        alert("El campo 'Área' es obligatorio.");
+        return;
+      }
 
-    // Verificar si ya existe la combinación de id_depto e id_area, pero ignorando el registro actual cuando se edita
-    const existeRelacion = this.deptosareas.some((deptoarea) =>
-      deptoarea.id_depto === this.formData.id_depto &&
-      deptoarea.id_area === this.formData.id_area &&
-      deptoarea.id_dep_area !== this.formData.id_dep_area // Asegurarse de que no sea el mismo registro
-    );
-
-    if (existeRelacion) {
-      alert("La relación entre el departamento y el área ya existe. No se puede duplicar.");
-      return;
-    }
-
-    // Guardar o actualizar según corresponda
-    if (this.formData.id_dep_area) {
-      // Actualizar el registro
-      await axios.put(`${apiUrl}/deptoarea/${this.formData.id_dep_area}`, this.formData);
-    } else {
-      // Crear un nuevo registro
-      await axios.post(`${apiUrl}/deptoarea`, this.formData);
-    }
-    this.fetchDeptosAreas();
-    this.cancelForm();
-  } catch (error) {
-    console.error("Error al guardar el departamento:", error);
-    if (error.response && error.response.data && error.response.data.errors) {
-      const errores = error.response.data.errors;
-      alert(
-        `Errores al guardar:\n- ${errores.id_depto ? errores.id_depto.join(", ") : ""}\n- ${errores.id_area ? errores.id_area.join(", ") : ""}`
+      // Verificar si ya existe la combinación de id_depto e id_area, pero ignorando el registro actual cuando se edita
+      const existeRelacion = this.deptosareas.some((deptoarea) =>
+        deptoarea.id_depto === this.formData.id_depto &&
+        deptoarea.id_area === this.formData.id_area &&
+        deptoarea.id_dep_area !== this.formData.id_dep_area // Asegurarse de que no sea el mismo registro
       );
+
+      if (existeRelacion) {
+        alert("La relación entre el departamento y el área ya existe. No se puede duplicar.");
+        return;
+      }
+
+      // Guardar o actualizar según corresponda
+      if (this.formData.id_dep_area) {
+        // Actualizar el registro
+        await axios.put(`${apiUrl}/deptoarea/${this.formData.id_dep_area}`, this.formData);
+      } else {
+        // Crear un nuevo registro
+        await axios.post(`${apiUrl}/deptoarea`, this.formData);
+      }
+      this.fetchDeptosAreas();
+      this.cancelForm();
+    } catch (error) {
+      console.error("Error al guardar el departamento:", error);
+      if (error.response && error.response.data && error.response.data.errors) {
+        const errores = error.response.data.errors;
+        alert(
+          `Errores al guardar:\n- ${errores.id_depto ? errores.id_depto.join(", ") : ""}\n- ${errores.id_area ? errores.id_area.join(", ") : ""}`
+        );
+      }
     }
-  }
-}
-,
+  },
 
     //-------------------------- put
     async fetchDeptosAreas() {

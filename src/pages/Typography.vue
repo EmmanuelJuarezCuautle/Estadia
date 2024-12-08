@@ -17,6 +17,7 @@
         </div>
         <div class="card-body">
           <form @submit.prevent="guardarEquipo">
+            
             <div class="row mt-2">
               <!-- Categoría -->
               <div class="col-md-4">
@@ -313,46 +314,46 @@
                 </div>
               </div>
              <!-- Select de Departamento -->
-<div class="col-md-4">
-  <div class="form-group">
-    <label for="departamento">Departamento</label>
-    <select
-      id="departamento"
-      v-model="formData.id_depto"
-      class="form-control"
-      :disabled="soloLectura"
-      required
-    >
-      <option value="" disabled>Seleccione un Departamento</option>
-      <option
-        v-for="(areas, id) in departamentosAreas"
-        :key="id"
-        :value="id"
-      >
-        {{ getDepartamentoNombre(id) }}
-      </option>
-    </select>
-  </div>
-</div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="departamento">Departamento</label>
+                  <select
+                    id="departamento"
+                    v-model="formData.id_depto"
+                    class="form-control"
+                    :disabled="soloLectura"
+                    required
+                  >
+                    <option value="" disabled>Seleccione un Departamento</option>
+                    <option
+                      v-for="(areas, id) in departamentosAreas"
+                      :key="id"
+                      :value="id"
+                    >
+                      {{ getDepartamentoNombre(id) }}
+                    </option>
+                  </select>
+                </div>
+              </div>
 
-<!-- Select de Áreas -->
-<div class="col-md-4">
-  <div class="form-group">
-    <label for="area">Áreas</label>
-    <select
-      id="area"
-      v-model="formData.id_area"
-      class="form-control"
-      :disabled="!filteredAreas.length || soloLectura"
-      required
-    >
-      <option value="" disabled>Seleccione un Área</option>
-      <option v-for="area in filteredAreas" :key="area.id" :value="area.id">
-        {{ area.nombre }}
-      </option>
-    </select>
-  </div>
-</div>
+              <!-- Select de Áreas -->
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="area">Áreas</label>
+                  <select
+                    id="area"
+                    v-model="formData.id_area"
+                    class="form-control"
+                    :disabled="!filteredAreas.length || soloLectura"
+                    required
+                  >
+                    <option value="" disabled>Seleccione un Área</option>
+                    <option v-for="area in filteredAreas" :key="area.id" :value="area.id">
+                      {{ area.nombre }}
+                    </option>
+                  </select>
+                </div>
+              </div>
 
 
             </div>
@@ -391,24 +392,88 @@
         </div>
       </div>
     </div>
-    <!--Tabla Principal de mostrar datos de API-->
+    
+
+    <!-- Filtros -->
+    <div class="filters mb-4 row">
+      <!-- Filtro por Categoría -->
+      <div class="col-md-2">
+        <select v-model="filters.categoria" class="form-control">
+          <option value="">Todas las Categorías</option>
+          <option v-for="(nombre, id) in categorias" :key="id" :value="id">
+            {{ nombre }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Filtro por Marca -->
+      <div class="col-md-2">
+        <select v-model="filters.marca" class="form-control">
+          <option value="">Todas las Marcas</option>
+          <option v-for="(nombre, id) in marcas" :key="id" :value="id">
+            {{ nombre }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Filtro por Modelo -->
+      <div class="col-md-2">
+        <select v-model="filters.modelo" class="form-control">
+          <option value="">Todos los Modelos</option>
+          <option v-for="(nombre, id) in modelos" :key="id" :value="id">
+            {{ nombre }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Filtro por Agencia -->
+      <div class="col-md-2">
+        <select v-model="filters.agencia" class="form-control">
+          <option value="">Todas las Agencias</option>
+          <option v-for="(nombre, id) in agencias" :key="id" :value="id">
+            {{ nombre }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Filtro por Departamento -->
+      <div class="col-md-2">
+        <select v-model="filters.departamento" class="form-control">
+          <option value="">Todos los Departamentos</option>
+          <option v-for="(nombre, id) in departamentos" :key="id" :value="id">
+            {{ nombre }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Filtro por Área -->
+      <div class="col-md-2">
+        <select v-model="filters.area" class="form-control">
+          <option value="">Todas las Áreas</option>
+          <option v-for="(nombre, id) in areas" :key="id" :value="id">
+            {{ nombre }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Tabla Principal -->
     <div class="table-responsive">
       <table class="table table-striped table-hover text-center">
         <thead class="thead-dark">
           <tr>
-            <th scope="col" style="width: 5%">#</th>
-            <th scope="col" style="width: 10%">Categoría</th>
-            <th scope="col" style="width: 10%">Marca</th>
-            <th scope="col" style="width: 10%">Modelo</th>
-            <th scope="col" style="width: 10%">Agencia</th>
-            <th scope="col" style="width: 10%">Depto</th>
-            <th scope="col" style="width: 13%">Area</th>
-            
+            <th scope="col" style="width: 4%">#</th>
+            <th scope="col" style="width: 8%">Categoría</th>
+            <th scope="col" style="width: 8%">Marca</th>
+            <th scope="col" style="width: 8%">Modelo</th>
+            <th scope="col" style="width: 8%">Agencia</th>
+            <th scope="col" style="width: 8%">Depto</th>
+            <th scope="col" style="width: 13%">Área</th>
             <th scope="col" style="width: 25%">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="equipo in equipos" :key="equipo.id_equipo">
+          <tr v-for="equipo in filteredEquipos" :key="equipo.id_equipo">
             <td>{{ equipo.id_equipo }}</td>
             <td>{{ getCategoriaNombre(equipo.id_catego) }}</td>
             <td>{{ getMarcaNombre(equipo.id_marca) }}</td>
@@ -416,19 +481,15 @@
             <td>{{ getAgenciaNombre(equipo.id_agencia) }}</td>
             <td>{{ getDepartamentoNombre(equipo.id_depto) }}</td>
             <td>{{ getAreaNombre(equipo.id_area) }}</td>
-
             <td class="td-actions">
               <button
                 class="btn btn-warning btn-sm"
-                style="margin-right: 8px"
                 @click="editEquipo(equipo)"
-                
               >
                 <i class="fa-solid fa-pen-to-square"></i> Editar
               </button>
               <button
                 class="btn btn-mostrar btn-sm"
-                style="margin-right: 7px"
                 @click="mostrarEquipo(equipo)"
               >
                 <i class="fa-solid fa-eye"></i> Mostrar
@@ -436,7 +497,6 @@
               <button
                 class="btn btn-danger btn-sm"
                 @click="eliminarEquipo(equipo.id_equipo)"
-                style="margin-right: 8px"
               >
                 <i class="fa-solid fa-trash"></i> Eliminar
               </button>
@@ -477,6 +537,14 @@ export default {
 
       selectedDepartamento: null, // Para el select de departamentos
      filteredAreas: [],
+     filters: {
+        categoria: "",
+        marca: "",
+        modelo: "",
+        agencia: "",
+        departamento: "",
+        area: "",
+      },
 
       showForm: false,
       editMode: false,
@@ -504,7 +572,23 @@ export default {
       soloLectura: false,
 
     };
+    
   },
+  computed: {
+  filteredEquipos() {
+    return this.equipos.filter((equipo) => {
+      return (
+        (!this.filters.categoria || parseInt(equipo.id_catego) === parseInt(this.filters.categoria)) &&
+        (!this.filters.marca || parseInt(equipo.id_marca) === parseInt(this.filters.marca)) &&
+        (!this.filters.modelo || parseInt(equipo.id_modelo) === parseInt(this.filters.modelo)) &&
+        (!this.filters.agencia || parseInt(equipo.id_agencia) === parseInt(this.filters.agencia)) &&
+        (!this.filters.departamento || parseInt(equipo.id_depto) === parseInt(this.filters.departamento)) &&
+        (!this.filters.area || parseInt(equipo.id_area) === parseInt(this.filters.area))
+      );
+    });
+  },
+},
+
   mounted() {
     this.fetchEquipos();
     this.fetchCategorias();
@@ -525,12 +609,7 @@ export default {
     //this.fetchDeptoAreas();
     this.fetchDepartamentoArea();
   },
-  // watch: {
-  //   // Actualiza las áreas cada vez que se selecciona un departamento
-  //   selectedDepartamento() {
-  //     this.filterAreas();
-  //   },
-  // },
+
   watch: {
   "formData.id_depto": {
     handler() {
@@ -541,6 +620,7 @@ export default {
 },
 
   methods: {
+
     async fetchEquipos() {
       try {
         const response = await axios.get(`${apiUrl}/modulocomputadoraequipo`, {

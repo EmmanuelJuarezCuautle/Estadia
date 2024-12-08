@@ -111,8 +111,50 @@
         </div>
       </div>
     </div>
-     <!-------------------------------------------------------------------------------------------------------->
-     <div class="table-responsive">
+     <!-- Filtros -->
+    <div class="row mb-3">
+      <div class="col-md-3">
+        <select v-model="filters.tipoMant" class="form-control">
+          <option value="">Todos los Tipos de Mantenimiento</option>
+          <option v-for="tipo in tipoMantOptions" :key="tipo" :value="tipo">
+            {{ tipo }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Filtro por Administrador -->
+      <div class="col-md-2">
+        <select v-model="filters.admin" class="form-control">
+          <option value="">Todos los Administradores</option>
+          <option v-for="(nombre, id) in administradores" :key="id" :value="id">
+            {{ nombre }}
+          </option>
+        </select>
+      </div>
+
+
+
+      <div class="col-md-3">
+        <select v-model="filters.agencia" class="form-control">
+          <option value="">Todas las Agencias</option>
+          <option v-for="agencia in agencias" :key="agencia.id_agencia" :value="agencia.id_agencia">
+            {{ agencia.nombre_age }}
+          </option>
+        </select>
+      </div>
+
+      <div class="col-md-3">
+        <input
+          type="text"
+          v-model="filters.numeroSerie"
+          class="form-control"
+          placeholder="Buscar por Número de Serie"
+        />
+      </div>
+    </div>
+
+    <!-- Tabla Principal -->
+    <div class="table-responsive">
       <table class="table table-striped table-hover text-center">
         <thead class="thead-dark">
           <tr>
@@ -123,13 +165,10 @@
             <th scope="col" style="width: 10%">Empleado</th>
             <th scope="col" style="width: 15%">Agencia</th>
             <th scope="col" style="width: 30%">Acciones</th>
-        </tr>
+          </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="mantenimiento in mantenimientos"
-            :key="mantenimiento.id_mod_mant"
-          >
+          <tr v-for="mantenimiento in filteredMantenimientos" :key="mantenimiento.id_mod_mant">
             <td>{{ mantenimiento.id_mod_mant }}</td>
             <td>{{ mantenimiento.tipo_mant }}</td>
             <td>{{ getAdministradorNombre(mantenimiento.id_admin) }}</td>
@@ -139,23 +178,15 @@
             <td class="td-actions">
               <button
                 class="btn btn-warning btn-sm"
-                style="width: 100px; margin-left: 30px; margin-right: 30px"
                 @click="editAgency(mantenimiento)"
               >
-                <i
-                  class="fa-solid fa-pen-to-square"
-                  style="margin-right: 10px"
-                ></i>
-                Editar
+                <i class="fa-solid fa-pen-to-square"></i> Editar
               </button>
-              
               <button
                 class="btn btn-danger btn-sm"
-                style="width: 100px"
                 @click="eliminarMantenim(mantenimiento.id_mod_mant)"
               >
-                <i class="fa-solid fa-trash" style="margin-right: 10px"></i
-                >Eliminar
+                <i class="fa-solid fa-trash"></i> Eliminar
               </button>
             </td>
           </tr>
@@ -201,7 +232,32 @@ export default {
         id_catego: "Categoría",
         id_equipo: "Equipo",
       },
+      filters: {
+        tipoMant: "",
+        admin: "",
+        agencia: "",
+        numeroSerie: "",
+      },
     };
+    
+  },
+  computed: {
+    tipoMantOptions() {
+      // Extraer opciones únicas de tipo_mant
+      return [...new Set(this.mantenimientos.map((m) => m.tipo_mant))];
+    },
+    filteredMantenimientos() {
+  return this.mantenimientos.filter((mantenimiento) => {
+    const equipo = this.getEquiposNombre(mantenimiento.id_equipo);
+    return (
+      (!this.filters.tipoMant || mantenimiento.tipo_mant === this.filters.tipoMant) &&
+      (!this.filters.admin || parseInt(mantenimiento.id_admin) === parseInt(this.filters.admin)) &&
+      (!this.filters.agencia || mantenimiento.id_agencia === this.filters.agencia) &&
+      (!this.filters.numeroSerie || (equipo && equipo.numero_serie.includes(this.filters.numeroSerie)))
+    );
+  });
+},
+
   },
   mounted() {
     this.fetchMantenimiento();
@@ -212,6 +268,8 @@ export default {
     this.fetchEquipos();
     this.fetchAdministradores();
   },
+  
+  
   methods: {
     async fetchMantenimiento() {
       try {
@@ -263,6 +321,7 @@ export default {
     getAdministradorNombre(id_admin) {
       return this.administradores[id_admin] || "Desconocido";
     },
+    
     async fetchAgencias() {
       try {
         const response = await axios.get(`${apiUrl}/agencia`, {
