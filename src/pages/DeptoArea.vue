@@ -156,7 +156,7 @@ export default {
     //-------------------------- put
     async fetchDeptosAreas() {
       try {
-        const response = await axios.get(`${apiUrl}/deptoarea`, {
+        const response = await axios.get(`${apiUrl}/depto-areas`, {
           headers: {
             "ngrok-skip-browser-warning": "true",
           },
@@ -226,9 +226,9 @@ export default {
     async guardarDepartamento() {
       try {
         if (this.formData.id_dep_area) {
-          await axios.put(`${apiUrl}/deptoarea/${this.formData.id_dep_area}`, this.formData);
+          await axios.put(`${apiUrl}/depto-areas/${this.formData.id_dep_area}`, this.formData);
         } else {
-          await axios.post(`${apiUrl}/deptoarea`, this.formData);
+          await axios.post(`${apiUrl}/depto-areas`, this.formData);
         }
         this.fetchDeptosAreas();
         this.cancelForm();
@@ -239,7 +239,7 @@ export default {
     async eliminarAgencia(id) {
       if (confirm("¿Estás seguro de eliminar este Registro?")) {
         try {
-          await axios.delete(`${apiUrl}/deptoarea/${id}`);
+          await axios.delete(`${apiUrl}/depto-areas/${id}`);
           this.fetchDeptosAreas();
         } catch (error) {
           console.error("Error al eliminar Departamento Area:", error);

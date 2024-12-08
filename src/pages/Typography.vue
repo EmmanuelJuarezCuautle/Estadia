@@ -312,37 +312,47 @@
                   </select>
                 </div>
               </div>
-              <!-- Select de Departamento -->
-               <div class="col-md-4">
-                <div class="form-group">
-                <label for="departamento">Departamento</label>
-                <select
-                  id="departamento" v-model="selectedDepartamento"class="form-control"
-                  :disabled="soloLectura" required
-                  >
-                  <option value="" disabled>Seleccione un Departamento</option>
-                  <option v-for="(areas, nombre) in departamentosAreas":key="nombre" :value="nombre">
-                    {{ nombre }}
-                  </option>
-                </select>
-              </div>
-               </div>
-             
-               <div class="col-md-4">
+             <!-- Select de Departamento -->
+<div class="col-md-4">
+  <div class="form-group">
+    <label for="departamento">Departamento</label>
+    <select
+      id="departamento"
+      v-model="formData.id_depto"
+      class="form-control"
+      :disabled="soloLectura"
+      required
+    >
+      <option value="" disabled>Seleccione un Departamento</option>
+      <option
+        v-for="(areas, id) in departamentosAreas"
+        :key="id"
+        :value="id"
+      >
+        {{ getDepartamentoNombre(id) }}
+      </option>
+    </select>
+  </div>
+</div>
 
-                 <!-- Select de Áreas -->
-                 <div class="form-group">
-                   <label for="area">Áreas</label>
-                   <select
-                     id="area" v-model="formData.id_area" class="form-control" :disabled="soloLectura" required >
-                     <option value="" disabled>Seleccione un Área</option>
-                     <option v-for="area in filteredAreas":key="area.id" :value="area.id" >
-                       {{ area.nombre }}
-                     </option>
-                   </select>
-                 </div>
-
-               </div>
+<!-- Select de Áreas -->
+<div class="col-md-4">
+  <div class="form-group">
+    <label for="area">Áreas</label>
+    <select
+      id="area"
+      v-model="formData.id_area"
+      class="form-control"
+      :disabled="!filteredAreas.length || soloLectura"
+      required
+    >
+      <option value="" disabled>Seleccione un Área</option>
+      <option v-for="area in filteredAreas" :key="area.id" :value="area.id">
+        {{ area.nombre }}
+      </option>
+    </select>
+  </div>
+</div>
 
 
             </div>
@@ -390,8 +400,9 @@
             <th scope="col" style="width: 10%">Categoría</th>
             <th scope="col" style="width: 10%">Marca</th>
             <th scope="col" style="width: 10%">Modelo</th>
-            <th scope="col" style="width: 11%">Agencia</th>
-            <th scope="col" style="width: 13%">Depto</th>
+            <th scope="col" style="width: 10%">Agencia</th>
+            <th scope="col" style="width: 10%">Depto</th>
+            <th scope="col" style="width: 13%">Area</th>
             
             <th scope="col" style="width: 25%">Acciones</th>
           </tr>
@@ -404,11 +415,12 @@
             <td>{{ getModeloNombre(equipo.id_modelo) }}</td>
             <td>{{ getAgenciaNombre(equipo.id_agencia) }}</td>
             <td>{{ getDepartamentoNombre(equipo.id_depto) }}</td>
+            <td>{{ getAreaNombre(equipo.id_area) }}</td>
 
             <td class="td-actions">
               <button
                 class="btn btn-warning btn-sm"
-                style="margin-right: 10px"
+                style="margin-right: 8px"
                 @click="editEquipo(equipo)"
                 
               >
@@ -416,7 +428,7 @@
               </button>
               <button
                 class="btn btn-mostrar btn-sm"
-                style="margin-right: 10px"
+                style="margin-right: 7px"
                 @click="mostrarEquipo(equipo)"
               >
                 <i class="fa-solid fa-eye"></i> Mostrar
@@ -424,7 +436,7 @@
               <button
                 class="btn btn-danger btn-sm"
                 @click="eliminarEquipo(equipo.id_equipo)"
-                style="margin-right: 10px"
+                style="margin-right: 8px"
               >
                 <i class="fa-solid fa-trash"></i> Eliminar
               </button>
@@ -513,12 +525,21 @@ export default {
     //this.fetchDeptoAreas();
     this.fetchDepartamentoArea();
   },
+  // watch: {
+  //   // Actualiza las áreas cada vez que se selecciona un departamento
+  //   selectedDepartamento() {
+  //     this.filterAreas();
+  //   },
+  // },
   watch: {
-    // Actualiza las áreas cada vez que se selecciona un departamento
-    selectedDepartamento() {
+  "formData.id_depto": {
+    handler() {
       this.filterAreas();
     },
+    immediate: true, // Esto asegura que se ejecute al montar el componente.
   },
+},
+
   methods: {
     async fetchEquipos() {
       try {
@@ -813,21 +834,7 @@ export default {
     getAgenciaNombre(id_agencia) {
       return this.agencias[id_agencia] || "Desconocido";
     },
-    //========= Departamentos
-    async fetchEquipos() {
-      try {
-        const response = await axios.get(`${apiUrl}/modulocomputadoraequipo`, {
-          headers: {
-            "ngrok-skip-browser-warning": "true",
-          },
-        });
-        if (response.data && Array.isArray(response.data)) {
-          this.equipos = response.data;
-        }
-      } catch (error) {
-        console.error("Error al obtener los equipos:", error);
-      }
-    },
+
     //========= Departamentos
     async fetchDepartamentos() {
       try {
@@ -871,51 +878,36 @@ export default {
     getAreaNombre(id_area) {
       return this.areas[id_area] || "Desconocido";
     },
-    //--------------------------
-    async fetchDepartamentoArea() {
-      try {
-        const response = await axios.get(`${apiUrl}/depto-areas`, {
-          headers: {
-            "ngrok-skip-browser-warning": "true",
-          },
-        });
-
-        if (response.data && Array.isArray(response.data)) {
-          this.departamentosAreas = response.data.reduce((acc, item) => {
-            if (!acc[item.nombre_depto]) {
-              acc[item.nombre_depto] = [];
-            }
-            acc[item.nombre_depto].push({
-              id: item.id_dep_area,
-              nombre: item.nombre_area,
-            });
-            return acc;
-          }, {});
+    //--------------------------const response = await axios.get(`${apiUrl}/depto-areas`
+    fetchDepartamentoArea() {
+  axios.get(`${apiUrl}/depto-areas`)
+    .then(response => {
+      this.departamentosAreas = response.data.reduce((acc, item) => {
+        if (!acc[item.departamento.id_depto]) {
+          acc[item.departamento.id_depto] = [];
         }
-      } catch (error) {
-        console.error("Error al obtener departamentos y áreas:", error);
-      }
-    },
+        acc[item.departamento.id_depto].push({
+          id: item.area.id_area,
+          nombre: item.area.nombre_area
+        });
+        return acc;
+      }, {});
+    })
+    .catch(error => {
+      console.error('Error al obtener los departamentos y áreas:', error);
+    });
+},
+
 
     // Filtra las áreas según el departamento seleccionado
     filterAreas() {
-      if (this.selectedDepartamento) {
-        this.filteredAreas = this.departamentosAreas[this.selectedDepartamento] || [];
-      } else {
-        this.filteredAreas = [];
-      }
-    },
+  if (this.formData.id_depto) {
+    this.filteredAreas = this.departamentosAreas[this.formData.id_depto] || [];
+  } else {
+    this.filteredAreas = [];
+  }
+},
   
-
-
-  created() {
-    // Carga los datos al iniciar
-    this.fetchDepartamentoArea();
-  },
-
-
-
-
     async guardarEquipo() {
       try {
         if (this.formData.id_equipo) {

@@ -5,7 +5,6 @@ import App from "./App.vue";
 // LightBootstrap plugin
 import LightBootstrap from "./light-bootstrap-main";
 import axios from "axios";
-//import VueAxios from "vue-axios";
 import '@fortawesome/fontawesome-free/css/all.css';
 import '@fortawesome/fontawesome-free/js/all.js';
 import VueAxios from "vue-axios";  // Importa VueAxios correctamente
@@ -13,6 +12,9 @@ import VueAxios from "vue-axios";  // Importa VueAxios correctamente
 import routes from "./routes/routes";
 
 import "./registerServiceWorker";
+
+axios.defaults.baseURL = 'https://162a-189-164-39-38.ngrok-free.app/api';
+Vue.prototype.$axios = axios;
 
 // plugin setup
 Vue.use(VueRouter);
@@ -30,6 +32,24 @@ const router = new VueRouter({
       return { x: 0, y: 0 };
     }
   },
+});
+
+// Agregar el middleware de autenticación después de la configuración del router
+// router.beforeEach((to, from, next) => {
+//   const token = localStorage.getItem("auth_token");
+
+//   if (to.matched.some(record => record.meta.requiresAuth)) {
+//     if (!token) {
+//       next({ name: "Login" });
+//     } else {
+//       next();
+//     }
+//   } else {
+//     next();
+//   }
+// });
+router.beforeEach((to, from, next) => {
+  next(); // Permite el acceso a todas las rutas
 });
 
 /* eslint-disable no-new */

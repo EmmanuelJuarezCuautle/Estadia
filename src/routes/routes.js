@@ -11,7 +11,7 @@ import Icons from 'src/pages/Icons.vue'
 import Maps from 'src/pages/Maps.vue'
 import Notifications from 'src/pages/Notifications.vue'
 import Upgrade from 'src/pages/Upgrade.vue'
-///Paginas de componentes 
+// Paginas de componentes
 import Agencias from 'src/pages/Agencias.vue'
 import Departamentos from 'src/pages/Departamentos.vue'
 import Areas from '../pages/Areas.vue'
@@ -28,7 +28,6 @@ import Office from '../pages/Office.vue'
 import Login from '../Login.vue';
 import ModuloControlGeneral from '../pages/ModuloControlGeneral.vue'
 import DeptoArea from '../pages/DeptoArea.vue'
-
 import Administradores from '../pages/Administradores.vue'
 
 const routes = [
@@ -44,22 +43,26 @@ const routes = [
   {
     path: '/admin',
     component: DashboardLayout,
+    meta: { requiresAuth: true },
     redirect: '/admin/panel',
     children: [
       {
         path: 'panel',
         name: 'panel',
-        component: Overview
+        component: Overview,
+        meta: { requiresAuth: true }
       },
       {
         path: 'user',
         name: 'User',
-        component: UserProfile
+        component: UserProfile,
+        meta: { requiresAuth: true }
       },
       {
         path: 'mantenimiento',
         name: 'Mantenimiento',
-        component: TableList
+        component: TableList,
+        meta: { requiresAuth: true }
       },
       {
         path: 'equipos',
@@ -67,83 +70,83 @@ const routes = [
         component: Typography
       },
       {
-        path: 'datosgenerales',  // Cambié la ruta base a 'icons'
+        path: 'datosgenerales',
         name: 'datosgenerales',
         component: Icons,
+        meta: { requiresAuth: true }
       },
       {
-        path: 'agencias',  // Cambié la ruta base a 'icons'
+        path: 'agencias',
         name: 'Agencias',
         component: Agencias,
       },
       {
-        path: 'departamentos',  // Cambié la ruta base a 'icons'
+        path: 'departamentos',
         name: 'Departamentos',
         component: Departamentos,
       },
       {
-        path: 'areas',  // Cambié la ruta base a 'icons'
+        path: 'areas',
         name: 'Areas',
         component: Areas,
       },
       {
-        path: 'categorias',  // Cambié la ruta base a 'icons'
+        path: 'categorias',
         name: 'Categorias',
         component: Categorias,
       },
       {
-        path: 'marcas',  // Cambié la ruta base a 'icons'
+        path: 'marcas',
         name: 'Marcas',
         component: Marcas,
       },
       {
-        path: 'modelos',  // Cambié la ruta base a 'icons'
+        path: 'modelos',
         name: 'Modelos',
         component: Modelos,
       },
       {
-        path: 'monitores',  // Cambié la ruta base a 'icons'
+        path: 'monitores',
         name: 'Monitores',
         component: Monitores,
       },
       {
-        path: 'sistemaoperativo',  // Cambié la ruta base a 'icons'
+        path: 'sistemaoperativo',
         name: 'SistemaOperativo',
         component: SistemaOperativo,
       },
       {
-        path: 'procesadores',  // Cambié la ruta base a 'icons'
+        path: 'procesadores',
         name: 'Procesadores',
         component: Procesadores,
       },
       {
-        path: 'discoduro',  // Cambié la ruta base a 'icons'
+        path: 'discoduro',
         name: 'DiscoDuro',
         component: DiscoDuro,
       },
       {
-        path: 'ram',  // Cambié la ruta base a 'icons'
+        path: 'ram',
         name: 'Ram',
         component: Ram,
       },
       {
-        path: 'antivirus',  // Cambié la ruta base a 'icons'
+        path: 'antivirus',
         name: 'Antivirus',
         component: Antivirus,
       },
       {
-        path: 'office',  // Cambié la ruta base a 'icons'
+        path: 'office',
         name: 'Office',
         component: Office,
       },
       {
-        path: 'administradores',  // Cambié la ruta base a 'icons'
+        path: 'administradores',
         name: 'Administradores',
         component: Administradores,
       },
-      
       {
-        path: 'deptoarea',  // Cambié la ruta base a 'icons'
+        path: 'deptoarea',
         name: 'DeptoArea',
         component: DeptoArea,
       },
@@ -167,13 +170,4 @@ const routes = [
   { path: '*', component: NotFound }
 ]
 
-/**
- * Asynchronously load view (Webpack Lazy loading compatible)
- * The specified component must be inside the Views folder
- * @param  {string} name  the filename (basename) of the view to load.
-function view(name) {
-   var res= require('../components/Dashboard/Views/' + name + '.vue');
-   return res;
-};**/
-
-export default routes
+export default routes;
