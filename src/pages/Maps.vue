@@ -45,7 +45,7 @@
                 placeholder="Ingresa una contraseña"
                 required
               />
-</div>
+            </div>
 
             <div class="form-group">
               <label for="activo">Activo</label>
@@ -87,10 +87,10 @@
         <thead class="thead-dark">
           <tr>
             <th scope="col" style="width: 5%;">#</th>
-            <th scope="col" style="width: 60%;">Nombre</th>
-            <th scope="col" style="width: 60%;">Correo</th>
-            <th scope="col" style="width: 60%;">Activo</th>
-            <th scope="col" style="width: 60%;">Tipo</th>
+            <th scope="col" style="width: 15%;">Nombre</th>
+            <th scope="col" style="width: 20%;">Correo</th>
+            <th scope="col" style="width: 10%;">Activo</th>
+            <th scope="col" style="width: 20%;">Tipo</th>
             <th scope="col" style="width: 35%;">Acciones</th>
           </tr>
         </thead>

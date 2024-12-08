@@ -458,53 +458,52 @@
     </div>
 
     <!-- Tabla Principal -->
-    <div class="table-responsive">
-      <table class="table table-striped table-hover text-center">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col" style="width: 4%">#</th>
-            <th scope="col" style="width: 8%">Categoría</th>
-            <th scope="col" style="width: 8%">Marca</th>
-            <th scope="col" style="width: 8%">Modelo</th>
-            <th scope="col" style="width: 8%">Agencia</th>
-            <th scope="col" style="width: 8%">Depto</th>
-            <th scope="col" style="width: 13%">Área</th>
-            <th scope="col" style="width: 25%">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="equipo in filteredEquipos" :key="equipo.id_equipo">
-            <td>{{ equipo.id_equipo }}</td>
-            <td>{{ getCategoriaNombre(equipo.id_catego) }}</td>
-            <td>{{ getMarcaNombre(equipo.id_marca) }}</td>
-            <td>{{ getModeloNombre(equipo.id_modelo) }}</td>
-            <td>{{ getAgenciaNombre(equipo.id_agencia) }}</td>
-            <td>{{ getDepartamentoNombre(equipo.id_depto) }}</td>
-            <td>{{ getAreaNombre(equipo.id_area) }}</td>
-            <td class="td-actions">
-              <button
-                class="btn btn-warning btn-sm"
-                @click="editEquipo(equipo)"
-              >
-                <i class="fa-solid fa-pen-to-square"></i> Editar
-              </button>
-              <button
-                class="btn btn-mostrar btn-sm"
-                @click="mostrarEquipo(equipo)"
-              >
-                <i class="fa-solid fa-eye"></i> Mostrar
-              </button>
-              <button
-                class="btn btn-danger btn-sm"
-                @click="eliminarEquipo(equipo.id_equipo)"
-              >
-                <i class="fa-solid fa-trash"></i> Eliminar
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+<div class="table-responsive">
+  <table class="table table-striped table-hover text-center">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col" style="width: 4%">#</th>
+        <th scope="col" style="width: 8%">Categoría</th>
+        <th scope="col" style="width: 8%">Marca</th>
+        <th scope="col" style="width: 8%">Modelo</th>
+        <th scope="col" style="width: 8%">Agencia</th>
+        <th scope="col" style="width: 8%">Depto</th>
+        <th scope="col" style="width: 13%">Área</th>
+        <th scope="col" style="width: 25%">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="equipo in filteredEquipos" :key="equipo.id_equipo">
+        <td>{{ equipo.id_equipo }}</td>
+        <td>{{ getCategoriaNombre(equipo.id_catego) }}</td>
+        <td>{{ getMarcaNombre(equipo.id_marca) }}</td>
+        <td>{{ getModeloNombre(equipo.id_modelo) }}</td>
+        <td>{{ getAgenciaNombre(equipo.id_agencia) }}</td>
+        <td>{{ getDepartamentoNombre(equipo.id_depto) }}</td>
+        <td>{{ getAreaNombre(equipo.id_area) }}</td>
+        <td class="td-actions">
+          <button class="btn btn-warning btn-sm" @click="editEquipo(equipo)">
+            <i class="fa-solid fa-pen-to-square"></i> Editar
+          </button>
+          <button class="btn btn-mostrar btn-sm" @click="mostrarEquipo(equipo)">
+            <i class="fa-solid fa-eye"></i> Mostrar
+          </button>
+          <button class="btn btn-danger btn-sm" @click="eliminarEquipo(equipo.id_equipo)">
+            <i class="fa-solid fa-trash"></i> Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Paginación -->
+<div class="pagination mt-3 d-flex justify-content-center">
+  <button class="btn btn-primary btn-sm" @click="previousPage" :disabled="currentPage === 1">Anterior</button>
+  <span class="mx-2">Página {{ currentPage }} de {{ totalPages }}</span>
+  <button class="btn btn-primary btn-sm" @click="nextPage" :disabled="currentPage === totalPages">Siguiente</button>
+</div>
+
   </div>
 </template>
 
@@ -534,6 +533,8 @@ export default {
       areas: [],
       deptoareas: [],
       departamentosAreas: {},
+      currentPage: 1,          // Página actual
+      itemsPerPage: 5,        // Número de elementos por página
 
       selectedDepartamento: null, // Para el select de departamentos
      filteredAreas: [],
@@ -576,6 +577,8 @@ export default {
   },
   computed: {
   filteredEquipos() {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
     return this.equipos.filter((equipo) => {
       return (
         (!this.filters.categoria || parseInt(equipo.id_catego) === parseInt(this.filters.categoria)) &&
@@ -585,9 +588,13 @@ export default {
         (!this.filters.departamento || parseInt(equipo.id_depto) === parseInt(this.filters.departamento)) &&
         (!this.filters.area || parseInt(equipo.id_area) === parseInt(this.filters.area))
       );
-    });
+    }).slice(start, end); // Filtrar por página
+  },
+  totalPages() {
+    return Math.ceil(this.equipos.length / this.itemsPerPage); // Calcular el total de páginas
   },
 },
+
 
   mounted() {
     this.fetchEquipos();
@@ -977,6 +984,16 @@ export default {
       console.error('Error al obtener los departamentos y áreas:', error);
     });
 },
+nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  },
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  },
 
 
     // Filtra las áreas según el departamento seleccionado

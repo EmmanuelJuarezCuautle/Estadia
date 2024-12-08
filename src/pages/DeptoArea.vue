@@ -73,34 +73,45 @@
       </div>
     </div>
 
-    <!-- Tabla Principal -->
-<div class="table-responsive">
-  <table class="table table-striped table-hover text-center">
-    <thead class="thead-dark">
-      <tr>
-        <th scope="col" style="width: 5%;">#</th>
-        <th scope="col" style="width: 60%;">Departamento</th>
-        <th scope="col" style="width: 60%;">Áreas</th>
-        <th scope="col" style="width: 35%;">Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="deptoarea in filteredDeptosAreas" :key="deptoarea.id_dep_area">
-        <td>{{ deptoarea.id_dep_area }}</td>
-        <td>{{ getDepartamentoNombre(deptoarea.id_depto) }}</td>
-        <td>{{ getAreaNombre(deptoarea.id_area) }}</td>
-        <td class="td-actions">
-          <button class="btn btn-warning btn-sm" style="width: 100px; margin-left: 30px; margin-right: 30px;" @click="editAgency(deptoarea)">
-            <i class="fa-solid fa-pen-to-square" style="margin-right: 10px;"></i> Editar
-          </button>
-          <button class="btn btn-danger btn-sm" style="width: 100px;" @click="eliminarAgencia(deptoarea.id_dep_area)">
-            <i class="fa-solid fa-trash" style="margin-right: 10px;"></i> Eliminar
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+   <!-- Tabla Principal -->
+<div class="table-container text-center">
+  <div class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col" style="width: 5%;">#</th>
+          <th scope="col" style="width: 30%;">Departamento</th>
+          <th scope="col" style="width: 30%;">Áreas</th>
+          <th scope="col" style="width: 35%;">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="deptoarea in filteredDeptosAreas" :key="deptoarea.id_dep_area">
+          <td>{{ deptoarea.id_dep_area }}</td>
+          <td>{{ getDepartamentoNombre(deptoarea.id_depto) }}</td>
+          <td>{{ getAreaNombre(deptoarea.id_area) }}</td>
+          <td class="td-actions">
+            <button class="btn btn-warning btn-sm" style="width: 100px; margin-left: 30px; margin-right: 30px;" @click="editAgency(deptoarea)">
+              <i class="fa-solid fa-pen-to-square" style="margin-right: 10px;"></i> Editar
+            </button>
+            <button class="btn btn-danger btn-sm" style="width: 100px;" @click="eliminarAgencia(deptoarea.id_dep_area)">
+              <i class="fa-solid fa-trash" style="margin-right: 10px;"></i> Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+ <!-- Paginación -->
+<div class="pagination mt-3 d-flex justify-content-center">
+  <button class="btn btn-primary btn-sm" @click="previousPage" :disabled="currentPage === 1">Anterior</button>
+  <span class="mx-2">Página {{ currentPage }} de {{ totalPages }}</span>
+  <button class="btn btn-primary btn-sm" @click="nextPage" :disabled="currentPage === totalPages">Siguiente</button>
 </div>
+
+</div>
+
 
 
   </div>
@@ -129,19 +140,37 @@ export default {
         id_area: "",
       },
       filteredAreas: {},
+      currentPage: 1, // Página actual
+      itemsPerPage: 5, // Número de items por página
     };
   },
   computed: {
-    // Filtro de departamentos y áreas
-    filteredDeptosAreas() {
-      return this.deptosareas.filter(deptoarea => {
-        return (
-          (!this.filters.departamento || parseInt(deptoarea.id_depto) === parseInt(this.filters.departamento)) &&
-          (!this.filters.area || parseInt(deptoarea.id_area) === parseInt(this.filters.area))
-        );
-      });
+  filteredDeptosAreas() {
+    // Filtrar según los filtros seleccionados
+    let filtered = this.deptosareas.filter((deptoarea) => {
+      return (
+        (!this.filters.departamento || deptoarea.id_depto === this.filters.departamento) &&
+        (!this.filters.area || deptoarea.id_area === this.filters.area)
+      );
+    });
+
+    // Paginación
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return filtered.slice(startIndex, endIndex);
     },
-  },
+    totalPages() {
+      // Calcular el total de páginas
+      const totalItems = this.deptosareas.filter((deptoarea) => {
+        return (
+          (!this.filters.departamento || deptoarea.id_depto === this.filters.departamento) &&
+          (!this.filters.area || deptoarea.id_area === this.filters.area)
+        );
+      }).length;
+      return Math.ceil(totalItems / this.itemsPerPage);
+    },
+},
+
   mounted() {
     this.fetchDepartamentos();
     this.fetchAreas();
@@ -287,6 +316,21 @@ export default {
         }
       }
     },
+    goToPage(page) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+    }
+  },
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  },
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  },
     openForm() {
       this.showForm = true;
       this.editMode = false;

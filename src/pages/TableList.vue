@@ -112,88 +112,85 @@
       </div>
     </div>
      <!-- Filtros -->
-    <div class="row mb-3">
-      <div class="col-md-3">
-        <select v-model="filters.tipoMant" class="form-control">
-          <option value="">Todos los Tipos de Mantenimiento</option>
-          <option v-for="tipo in tipoMantOptions" :key="tipo" :value="tipo">
-            {{ tipo }}
-          </option>
-        </select>
-      </div>
-
-      <!-- Filtro por Administrador -->
-      <div class="col-md-2">
-        <select v-model="filters.admin" class="form-control">
-          <option value="">Todos los Administradores</option>
-          <option v-for="(nombre, id) in administradores" :key="id" :value="id">
-            {{ nombre }}
-          </option>
-        </select>
-      </div>
-
-
-
-      <div class="col-md-3">
-        <select v-model="filters.agencia" class="form-control">
-          <option value="">Todas las Agencias</option>
-          <option v-for="agencia in agencias" :key="agencia.id_agencia" :value="agencia.id_agencia">
-            {{ agencia.nombre_age }}
-          </option>
-        </select>
-      </div>
-
-      <div class="col-md-3">
-        <input
-          type="text"
-          v-model="filters.numeroSerie"
-          class="form-control"
-          placeholder="Buscar por Número de Serie"
-        />
-      </div>
+  <div class="row mb-3">
+    <div class="col-md-3">
+      <select v-model="filters.tipoMant" class="form-control">
+        <option value="">Todos los Tipos de Mantenimiento</option>
+        <option v-for="tipo in tipoMantOptions" :key="tipo" :value="tipo">
+          {{ tipo }}
+        </option>
+      </select>
     </div>
 
-    <!-- Tabla Principal -->
-    <div class="table-responsive">
-      <table class="table table-striped table-hover text-center">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col" style="width: 5%">#</th>
-            <th scope="col" style="width: 15%">Tipo Mant</th>
-            <th scope="col" style="width: 10%">Admin</th>
-            <th scope="col" style="width: 15%">Número de Serie</th>
-            <th scope="col" style="width: 10%">Empleado</th>
-            <th scope="col" style="width: 15%">Agencia</th>
-            <th scope="col" style="width: 30%">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="mantenimiento in filteredMantenimientos" :key="mantenimiento.id_mod_mant">
-            <td>{{ mantenimiento.id_mod_mant }}</td>
-            <td>{{ mantenimiento.tipo_mant }}</td>
-            <td>{{ getAdministradorNombre(mantenimiento.id_admin) }}</td>
-            <td>{{ getEquiposNombre(mantenimiento.id_equipo).numero_serie }}</td>
-            <td>{{ getEquiposNombre(mantenimiento.id_equipo).empleado }}</td>
-            <td>{{ getAgenciaNombre(mantenimiento.id_agencia) }}</td>
-            <td class="td-actions">
-              <button
-                class="btn btn-warning btn-sm"
-                @click="editAgency(mantenimiento)"
-              >
-                <i class="fa-solid fa-pen-to-square"></i> Editar
-              </button>
-              <button
-                class="btn btn-danger btn-sm"
-                @click="eliminarMantenim(mantenimiento.id_mod_mant)"
-              >
-                <i class="fa-solid fa-trash"></i> Eliminar
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="col-md-2">
+      <select v-model="filters.admin" class="form-control">
+        <option value="">Todos los Administradores</option>
+        <option v-for="(nombre, id) in administradores" :key="id" :value="id">
+          {{ nombre }}
+        </option>
+      </select>
     </div>
 
+    <div class="col-md-3">
+      <select v-model="filters.agencia" class="form-control">
+        <option value="">Todas las Agencias</option>
+        <option v-for="agencia in agencias" :key="agencia.id_agencia" :value="agencia.id_agencia">
+          {{ agencia.nombre_age }}
+        </option>
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <input
+        type="text"
+        v-model="filters.numeroSerie"
+        class="form-control"
+        placeholder="Buscar por Número de Serie"
+      />
+    </div>
+  </div>
+
+  <!-- Tabla Principal -->
+  <div class="table-responsive">
+    <table class="table table-striped table-hover text-center">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col" style="width: 5%">#</th>
+          <th scope="col" style="width: 15%">Tipo Mant</th>
+          <th scope="col" style="width: 14%">Admin</th>
+          <th scope="col" style="width: 18%">Número de Serie</th>
+          <th scope="col" style="width: 10%">Empleado</th>
+          <th scope="col" style="width: 15%">Agencia</th>
+          <th scope="col" style="width: 30%">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="mantenimiento in filteredMantenimientos" :key="mantenimiento.id">
+          <td>{{ mantenimiento.id_mod_mant }}</td>
+          <td>{{ mantenimiento.tipo_mant }}</td>
+          <td>{{ getAdministradorNombre(mantenimiento.id_admin) }}</td>
+          <td>{{ getEquiposNombre(mantenimiento.id_equipo).numero_serie }}</td>
+          <td>{{ getEquiposNombre(mantenimiento.id_equipo).empleado }}</td>
+          <td>{{ getAgenciaNombre(mantenimiento.id_agencia) }}</td>
+          <td class="td-actions">
+            <button class="btn btn-warning btn-sm" @click="editAgency(mantenimiento)">
+              <i class="fa-solid fa-pen-to-square"></i> Editar
+            </button>
+            <button class="btn btn-danger btn-sm" @click="eliminarMantenim(mantenimiento.id_mod_mant)">
+              <i class="fa-solid fa-trash"></i> Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginación -->
+  <div class="pagination mt-3 d-flex justify-content-center">
+    <button class="btn btn-primary btn-sm" @click="previousPage" :disabled="currentPage === 1">Anterior</button>
+    <span class="mx-2">Página {{ currentPage }} de {{ totalPages }}</span>
+    <button class="btn btn-primary btn-sm" @click="nextPage" :disabled="currentPage === totalPages">Siguiente</button>
+  </div>
   </div>
 </template>
 
@@ -216,6 +213,9 @@ export default {
       areas: [],
       categorias: [],
       searchSerie: "",
+      currentPage: 1,  // Página actual
+      itemsPerPage: 3, // Número de items por página
+      totalItems: 0,    // Total de items
       formData: {
         id_equipo: "",
         id_agencia: "",
@@ -238,27 +238,41 @@ export default {
         agencia: "",
         numeroSerie: "",
       },
+      tipoMantOptions: [ // Define las opciones de tipoMant
+      'Mantenimiento Preventivo',
+      'Mantenimiento Correctivo',
+      // Agrega más opciones según sea necesario
+    ],
     };
     
   },
   computed: {
-    tipoMantOptions() {
-      // Extraer opciones únicas de tipo_mant
-      return [...new Set(this.mantenimientos.map((m) => m.tipo_mant))];
-    },
-    filteredMantenimientos() {
-  return this.mantenimientos.filter((mantenimiento) => {
-    const equipo = this.getEquiposNombre(mantenimiento.id_equipo);
-    return (
-      (!this.filters.tipoMant || mantenimiento.tipo_mant === this.filters.tipoMant) &&
-      (!this.filters.admin || parseInt(mantenimiento.id_admin) === parseInt(this.filters.admin)) &&
-      (!this.filters.agencia || mantenimiento.id_agencia === this.filters.agencia) &&
-      (!this.filters.numeroSerie || (equipo && equipo.numero_serie.includes(this.filters.numeroSerie)))
-    );
-  });
+  filteredMantenimientos() {
+    // Filtra los mantenimientos según los filtros
+    const mantenimientosFiltrados = this.mantenimientos.filter((mantenimiento) => {
+      const equipo = this.getEquiposNombre(mantenimiento.id_equipo);
+      return (
+        (!this.filters.tipoMant || mantenimiento.tipo_mant === this.filters.tipoMant) &&
+        (!this.filters.admin || parseInt(mantenimiento.id_admin) === parseInt(this.filters.admin)) &&
+        (!this.filters.agencia || mantenimiento.id_agencia === this.filters.agencia) &&
+        (!this.filters.numeroSerie || (equipo && equipo.numero_serie.includes(this.filters.numeroSerie)))
+      );
+    });
+
+    this.totalItems = mantenimientosFiltrados.length; // Total de elementos filtrados
+
+    // Paginación: aplicar paginación sobre los elementos filtrados
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return mantenimientosFiltrados.slice(startIndex, endIndex);
+  },
+  totalPages() {
+    // Calcular el total de páginas basándonos en los elementos filtrados
+    return Math.ceil(this.totalItems / this.itemsPerPage);
+  },
 },
 
-  },
+
   mounted() {
     this.fetchMantenimiento();
     this.fetchAgencias();
@@ -268,7 +282,15 @@ export default {
     this.fetchEquipos();
     this.fetchAdministradores();
   },
-  
+  watch: {
+  filters: {
+    handler() {
+      this.currentPage = 1; // Restablece la página actual cuando los filtros cambian
+    },
+    deep: true, // Necesario para que se ejecute cuando cualquier filtro cambie
+  },
+},
+
   
   methods: {
     async fetchMantenimiento() {
@@ -406,7 +428,21 @@ export default {
         console.error("Error al obtener los monitores:", error);
       }
     },
-
+    nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  },
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  },
+  goToPage(page) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+    }
+  },
     
     async guardarMantenimiento() {
       try {
