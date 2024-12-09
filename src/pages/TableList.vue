@@ -107,7 +107,7 @@
                   class="form-control"
                   placeholder="Puerto IP del equipo"
                   :disabled="soloLectura"
-                  required
+                  
                 />
               </div>
             </div>
@@ -148,7 +148,7 @@
                   class="form-control"
                   placeholder="Correo del equipo"
                   :disabled="soloLectura"
-                  required
+                  
                 />
               </div>
             </div>
@@ -163,7 +163,7 @@
                   class="form-control"
                   placeholder="Contraseña del equipo"
                   :disabled="soloLectura"
-                  required
+                  
                 />
               </div>
             </div>
@@ -229,7 +229,7 @@
                     placeholder="Escribe un comentario"
                     rows="3"
                     :disabled="soloLectura"
-                    required
+                    
                   ></textarea>
                 </div>
               </div>
@@ -237,7 +237,7 @@
             </div>
 
             <div class="text-center">
-              <button type="submit" class="btn btn-success mr-2">
+              <button v-if="!soloLectura" type="submit" class="btn btn-success mr-2">
                 <i class="fa-solid fa-check"></i> Guardar
               </button>
               <button
