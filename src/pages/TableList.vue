@@ -10,27 +10,34 @@
     <div v-if="showForm" class="modal-overlay" @click.self="cancelForm">
       <div class="card modal-content">
         <div class="card-header">
-          <h4 class="mb-4">{{ editMode ? "Editar Mantenimiento" : "Agregar Mantenimiento" }}</h4>
+          <h4 class="mb-4">{{ editMode ? "Mantenimiento" : " Mantenimiento" }}</h4>
         </div>
         <div class="card-body">
           <form @submit.prevent="guardarMantenimiento">
-            <div class="row mt-2">
+            <div class=" mt-1">
               <!-- Buscar Número de Serie -->
-              <div class="col-md-12">
+              <div class="col-md-10">
                 <div class="form-group d-flex">
                   <input
                     type="text"
                     v-model="searchSerie"
                     placeholder="Buscar por número de serie"
                     class="form-control"
+                    :disabled="editMode || soloLectura"
                   />
-                  <button type="button" class="btn btn-primary ml-2" @click="buscarPorNumeroSerie">
+                  <button
+                    type="button"
+                    class="btn btn-primary ml-2"
+                    @click="buscarPorNumeroSerie"
+                    :disabled="editMode || soloLectura"
+                  >
                     Buscar
                   </button>
                 </div>
               </div>
+
             </div>
-            <div class="row mt-2">
+            <div class="row mt-1">
               <!-- Número de Serie -->
               <div class="col-md-4" v-for="(label, key) in labels" :key="key">
                 <div class="form-group">
@@ -45,54 +52,191 @@
                   />
                 </div>
               </div>
+              <!-- Tipo de Mantenimiento -->
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="tipo_mant">Tipo de Mantenimiento</label>
+                <select
+                  id="tipo_mant"
+                  v-model="formData.tipo_mant"
+                  class="form-control"
+                  :disabled="soloLectura"
+                  required
+                >
+                  <option value="" disabled>Selecciona tipo de mantenimiento</option>
+                  <option value="Preventivo">Preventivo</option>
+                  <option value="Correctivo">Correctivo</option>
+                  <option value="Predictivo">Predictivo</option>
+                </select>
+              </div>
             </div>
+          </div>
 
             
-            <div class="row mt-2">
-              <!-- Tipo de Mantenimiento -->
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label for="tipo_mant">Tipo de Mantenimiento</label>
-                  <select
-                    id="tipo_mant"
-                    v-model="formData.tipo_mant"
-                    class="form-control"
-                    :disabled="soloLectura"
-                    required
+          <div class="row mt-1">
+            <!-- Administrador -->
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="administrador">Admin</label>
+                <select
+                  id="administrador"
+                  v-model="formData.id_admin"
+                  class="form-control"
+                  :disabled="soloLectura"
+                  required
+                >
+                  <option value="" disabled>Seleccione Admin</option>
+                  <option
+                    v-for="(nombre, id) in administradores"
+                    :key="id"
+                    :value="id"
                   >
-                    <option value="" disabled>Selecciona tipo de mantenimiento</option>
-                    <option value="Preventivo">Preventivo</option>
-                    <option value="Correctivo">Correctivo</option>
-                    <option value="Predictivo">Predictivo</option>
-                  </select>
-                </div>
+                    {{ nombre }}
+                  </option>
+                </select>
               </div>
-
-              <!-- Administrador -->
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label for="administrador">Admin</label>
-                  <select
-                    id="administrador"
-                    v-model="formData.id_admin"
-                    class="form-control"
-                    :disabled="soloLectura"
-                    required
+            </div>
+            <!-- Puerto IP -->
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="puerto_ip">Dirección IP</label>
+                <input
+                  type="text"
+                  id="puerto_ip"
+                  v-model="formData.puerto_ip"
+                  class="form-control"
+                  placeholder="Puerto IP del equipo"
+                  :disabled="soloLectura"
+                  required
+                />
+              </div>
+            </div>
+            <!-- Monitor -->
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="monitor">Monitor</label>
+                <select
+                  id="monitor"
+                  v-model="formData.id_monitor"
+                  class="form-control"
+                  :disabled="soloLectura"
+                  required
+                >
+                  <option value="" disabled>Seleccione monitor</option>
+                  <option
+                    v-for="(nombre, id) in monitores"
+                    :key="id"
+                    :value="id"
                   >
-                    <option value="" disabled>Seleccione Admin</option>
-                    <option
-                      v-for="(nombre, id) in administradores"
-                      :key="id"
-                      :value="id"
-                    >
-                      {{ nombre }}
-                    </option>
-                  </select>
-                </div>
+                    {{ nombre }}
+                  </option>
+                </select>
               </div>
             </div>
 
+           </div>
 
+          <div class="row mt-1">
+            <!--Correo Equipo -->
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="correo_equipo">Correo Equipo</label>
+                <input
+                  type="text"
+                  id="correo_equipo"
+                  v-model="formData.correo_equipo"
+                  class="form-control"
+                  placeholder="Correo del equipo"
+                  :disabled="soloLectura"
+                  required
+                />
+              </div>
+            </div>
+             <!--Password Equipo -->
+             <div class="col-md-4">
+              <div class="form-group">
+                <label for="password_equipo">Contraseña Equipo</label>
+                <input
+                  type="text"
+                  id="password_equipo"
+                  v-model="formData.password_equipo"
+                  class="form-control"
+                  placeholder="Contraseña del equipo"
+                  :disabled="soloLectura"
+                  required
+                />
+              </div>
+            </div>
+            <!-- Accesorios -->
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="accesorios">Accesorios</label>
+                <input
+                  type="text"
+                  id="accesorios"
+                  v-model="formData.accesorios"
+                  class="form-control"
+                  placeholder="Accesorios del equipo"
+                  :disabled="soloLectura"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row mt-1">
+            <!-- Condición -->
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="condicion">Condición</label>
+                <select
+                  id="condicion"
+                  v-model="formData.condicion"
+                  class="form-control"
+                  :disabled="soloLectura"
+                  required
+                >
+                  <option value="" disabled>Selecciona tipo de condición</option>
+                  <option value="Excelente">Excelente</option>
+                  <option value="Buena">Buena</option>
+                  <option value="Regular">Regular</option>
+                  <option value="Mala">Mala</option>
+                </select>
+              </div>
+            </div>
+            <!-- Fecha de Mantenimiento -->
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="fecha_mant">Fecha de Mantenimiento</label>
+                <input
+                  type="date"
+                  id="fecha_mant"
+                  v-model="formData.fecha_mant"
+                  class="form-control"
+                  :disabled="soloLectura"
+                  required
+                />
+              </div>
+            </div>
+            <!-- Comentario -->
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="comentario">Comentario</label>
+                <textarea
+                  id="comentario"
+                  v-model="formData.comentario"
+                  class="form-control"
+                  placeholder="Escribe un comentario"
+                  rows="3"
+                  :disabled="soloLectura"
+                  required
+                ></textarea>
+              </div>
+            </div>
+          </div>
+
+
+          
 
             <div class="text-center">
               <button type="submit" class="btn btn-success mr-2">
@@ -112,17 +256,17 @@
       </div>
     </div>
      <!-- Filtros -->
-  <div class="row mb-3">
+  <div class="row mb-4">
     <div class="col-md-3">
       <select v-model="filters.tipoMant" class="form-control">
-        <option value="">Todos los Tipos de Mantenimiento</option>
+        <option value="">Todos los Mantenimiento</option>
         <option v-for="tipo in tipoMantOptions" :key="tipo" :value="tipo">
           {{ tipo }}
         </option>
       </select>
     </div>
 
-    <div class="col-md-2">
+    <div class="col-md-3">
       <select v-model="filters.admin" class="form-control">
         <option value="">Todos los Administradores</option>
         <option v-for="(nombre, id) in administradores" :key="id" :value="id">
@@ -156,11 +300,11 @@
       <thead class="thead-dark">
         <tr>
           <th scope="col" style="width: 5%">#</th>
-          <th scope="col" style="width: 15%">Tipo Mant</th>
-          <th scope="col" style="width: 14%">Admin</th>
+          <th scope="col" style="width: 13%">Tipo Mant</th>
+          <th scope="col" style="width: 13%">Admin</th>
           <th scope="col" style="width: 18%">Número de Serie</th>
           <th scope="col" style="width: 10%">Empleado</th>
-          <th scope="col" style="width: 15%">Agencia</th>
+          <th scope="col" style="width: 14%">Agencia</th>
           <th scope="col" style="width: 30%">Acciones</th>
         </tr>
       </thead>
@@ -176,6 +320,9 @@
             <button class="btn btn-warning btn-sm" @click="editAgency(mantenimiento)">
               <i class="fa-solid fa-pen-to-square"></i> Editar
             </button>
+            <button class="btn btn-mostrar btn-sm" @click="mostrarMantenim(mantenimiento)">
+            <i class="fa-solid fa-eye"></i> Mostrar
+          </button>
             <button class="btn btn-danger btn-sm" @click="eliminarMantenim(mantenimiento.id_mod_mant)">
               <i class="fa-solid fa-trash"></i> Eliminar
             </button>
@@ -187,9 +334,9 @@
 
   <!-- Paginación -->
   <div class="pagination mt-3 d-flex justify-content-center">
-    <button class="btn btn-primary btn-sm" @click="previousPage" :disabled="currentPage === 1">Anterior</button>
+    <button class="btn btn-atras btn-sm" @click="previousPage" :disabled="currentPage === 1">Anterior</button>
     <span class="mx-2">Página {{ currentPage }} de {{ totalPages }}</span>
-    <button class="btn btn-primary btn-sm" @click="nextPage" :disabled="currentPage === totalPages">Siguiente</button>
+    <button class="btn btn-siguente btn-sm" @click="nextPage" :disabled="currentPage === totalPages">Siguiente</button>
   </div>
   </div>
 </template>
@@ -214,7 +361,7 @@ export default {
       categorias: [],
       searchSerie: "",
       currentPage: 1,  // Página actual
-      itemsPerPage: 3, // Número de items por página
+      itemsPerPage: 5, // Número de items por página
       totalItems: 0,    // Total de items
       formData: {
         id_equipo: "",
@@ -223,14 +370,20 @@ export default {
         id_area: "",
         id_catego: "",
         numero_serie: "",
+        puerto_ip: "",
+        correo_equipo: "",
+        password_equipo: "",
+        accesorios: "",
+        condicion: "",
+        fecha_mant: "",
       },
+      soloLectura: false,
       labels: {
         numero_serie: "Número de Serie",
         id_agencia: "Agencia",
         id_depto: "Departamento",
         id_area: "Área",
         id_catego: "Categoría",
-        id_equipo: "Equipo",
       },
       filters: {
         tipoMant: "",
@@ -504,6 +657,13 @@ export default {
       this.showForm = true;
       this.editMode = true;
       this.soloLectura = false;
+    },
+    // Método para mostrar
+    mostrarMantenim(mantenimiento) {
+      this.formData = { ...mantenimiento };
+      this.showForm = true;
+      this.editMode = false; // Establecer editMode en false cuando se muestra
+      this.soloLectura = true; // Solo lectura en modo mostrar
     },
   },
 };

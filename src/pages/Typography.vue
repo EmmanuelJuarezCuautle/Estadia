@@ -1,18 +1,21 @@
 <template>
   <div class="container mt-4">
     <h2 class="letra1">Gestión de Equipos</h2>
+
     <div class="text-left mb-4">
       <button class="btn btn-add btn-sm" @click="openForm">
         <i class="fa-solid fa-square-plus" style="margin-right: 10px"></i>
         Agregar Equipo
-      </button>
+      </button>      
+      
     </div>
+    
     <div v-if="showForm" class="modal-overlay" @click.self="cancelForm">
       <div class="card modal-content">
         
         <div class="card-header">
           <h4 class="mb-4">
-            {{ editMode ? "Editar Equipo" : "Agregar Equipo" }}
+            {{ editMode ? "Equipo" : "Equipo" }}
           </h4>
         </div>
         <div class="card-body">
@@ -396,6 +399,15 @@
 
     <!-- Filtros -->
     <div class="filters mb-4 row">
+      <div class="col-md-3 mb-3">
+      <input
+      
+        type="text"
+        v-model="filters.numeroSerie"
+        class="form-control"
+        placeholder="Buscar por Número de Serie"
+        />
+      </div>
       <!-- Filtro por Categoría -->
       <div class="col-md-2">
         <select v-model="filters.categoria" class="form-control">
@@ -447,7 +459,7 @@
       </div>
 
       <!-- Filtro por Área -->
-      <div class="col-md-2">
+      <div class="col-md-2 ">
         <select v-model="filters.area" class="form-control">
           <option value="">Todas las Áreas</option>
           <option v-for="(nombre, id) in areas" :key="id" :value="id">
@@ -455,6 +467,9 @@
           </option>
         </select>
       </div>
+
+      
+
     </div>
 
     <!-- Tabla Principal -->
@@ -498,10 +513,10 @@
 </div>
 
 <!-- Paginación -->
-<div class="pagination mt-3 d-flex justify-content-center">
-  <button class="btn btn-primary btn-sm" @click="previousPage" :disabled="currentPage === 1">Anterior</button>
+<div class="pagination justify-content-center">
+  <button class="btn btn-sm btn-atras" @click="previousPage" :disabled="currentPage === 1">Anterior</button>
   <span class="mx-2">Página {{ currentPage }} de {{ totalPages }}</span>
-  <button class="btn btn-primary btn-sm" @click="nextPage" :disabled="currentPage === totalPages">Siguiente</button>
+  <button class="btn btn-sm btn-siguente" @click="nextPage" :disabled="currentPage === totalPages">Siguiente</button>
 </div>
 
   </div>
@@ -545,6 +560,7 @@ export default {
         agencia: "",
         departamento: "",
         area: "",
+        numeroSerie: "",
       },
 
       showForm: false,
@@ -586,7 +602,8 @@ export default {
         (!this.filters.modelo || parseInt(equipo.id_modelo) === parseInt(this.filters.modelo)) &&
         (!this.filters.agencia || parseInt(equipo.id_agencia) === parseInt(this.filters.agencia)) &&
         (!this.filters.departamento || parseInt(equipo.id_depto) === parseInt(this.filters.departamento)) &&
-        (!this.filters.area || parseInt(equipo.id_area) === parseInt(this.filters.area))
+        (!this.filters.area || parseInt(equipo.id_area) === parseInt(this.filters.area))&&
+        (!this.filters.numeroSerie || (equipo && equipo.numero_serie.includes(this.filters.numeroSerie)))
       );
     }).slice(start, end); // Filtrar por página
   },
@@ -641,6 +658,9 @@ export default {
       } catch (error) {
         console.error("Error al obtener los equipos:", error);
       }
+    },
+    numeroSerieRepetido(numeroSerie) {
+      return this.equipos.some(equipo => equipo.numero_serie === numeroSerie);
     },
     //========= Categorias
     async fetchCategorias() {
@@ -1007,22 +1027,31 @@ nextPage() {
   
     async guardarEquipo() {
       try {
+        // Comprobar si el número de serie ya existe (en el caso de crear un nuevo equipo)
+        if (!this.formData.id_equipo && this.numeroSerieRepetido(this.formData.numero_serie)) {
+          alert("El número de serie ya existe. Por favor, utiliza uno diferente.");
+          return;
+        }
+
         if (this.formData.id_equipo) {
-          // Actualizar agencia existente agencia
+          // Actualizar equipo existente
           await axios.put(
             `${apiUrl}/modulocomputadoraequipo/${this.formData.id_equipo}`,
             this.formData
           );
         } else {
-          // Crear nueva agencia
-          await axios.post(`${apiUrl}/modulocomputadoraequipo`, this.formData); // Usar backticks aquí
+          // Crear nuevo equipo
+          await axios.post(`${apiUrl}/modulocomputadoraequipo`, this.formData);
         }
+
+        // Actualizar lista de equipos
         this.fetchEquipos();
         this.cancelForm();
       } catch (error) {
-        console.error("Error al guardar la equipo:", error);
+        console.error("Error al guardar el equipo:", error);
       }
-    },
+    }
+    ,
     // Eliminar una equipo
     async eliminarEquipo(id) {
       if (confirm("¿Estás seguro de eliminar esta Equipo?")) {

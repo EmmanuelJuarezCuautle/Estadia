@@ -36,6 +36,8 @@
 .btn-danger  { @include btn-styles($danger-color, $danger-states-color); }
 .btn-add  { @include btn-styles(#0606f5, #000002); }
 .btn-mostrar  { @include btn-styles(#ac4ce3, #ac4ce3); }
+.btn-atras  { @include btn-styles(#3de02e, #21d5de); }
+.btn-siguente  { @include btn-styles(#3142d5, #3cd4d9); }
 .btn-neutral {
     @include btn-styles($white-color, $white-color);
 

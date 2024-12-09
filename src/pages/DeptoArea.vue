@@ -105,9 +105,9 @@
   
  <!-- Paginación -->
 <div class="pagination mt-3 d-flex justify-content-center">
-  <button class="btn btn-primary btn-sm" @click="previousPage" :disabled="currentPage === 1">Anterior</button>
+  <button class="btn btn-atras btn-sm" @click="previousPage" :disabled="currentPage === 1">Anterior</button>
   <span class="mx-2">Página {{ currentPage }} de {{ totalPages }}</span>
-  <button class="btn btn-primary btn-sm" @click="nextPage" :disabled="currentPage === totalPages">Siguiente</button>
+  <button class="btn  btn-siguente btn-sm" @click="nextPage" :disabled="currentPage === totalPages">Siguiente</button>
 </div>
 
 </div>
