@@ -22,7 +22,7 @@
                 id="nombre_admin"
                 v-model="formData.nombre_admin"
                 class="form-control"
-                placeholder="Nombre de la agencia"
+                placeholder="Nombre del Administrador"
                 required/>
             </div>
             <div class="form-group">
@@ -32,7 +32,7 @@
                 id="correo_admin"
                 v-model="formData.correo_admin"
                 class="form-control"
-                placeholder="Nombre de la agencia"
+                placeholder="Correo"
                 required/>
             </div>
             <div class="form-group" v-if="!editMode">
@@ -48,25 +48,32 @@
             </div>
 
             <div class="form-group">
-              <label for="activo">Activo</label>
-              <input 
-                type="text"
-                id="activo"
-                v-model="formData.activo"
-                class="form-control"
-                placeholder="Nombre de la agencia"
-                required/>
-            </div>
-            <div class="form-group">
-              <label for="tipo_admin">Tipo Administrador</label>
-              <input 
-                type="text"
-                id="tipo_admin"
-                v-model="formData.tipo_admin"
-                class="form-control"
-                placeholder="Nombre de la agencia"
-                required/>
-            </div>
+            <label for="activo">Activo</label>
+            <select 
+              id="activo" 
+              v-model="formData.activo" 
+              class="form-control" 
+              required>
+              <option value="">Selecciona una opción</option>
+              <option value="Si">Si</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="tipo_admin">Tipo Administrador</label>
+            <select 
+              id="tipo_admin" 
+              v-model="formData.tipo_admin" 
+              class="form-control" 
+              required>
+              <option value="">Selecciona un tipo</option>
+              <option value="Admin">Admin</option>
+              <option value="Normal">Normal</option>
+              <option value="Practicante">Practicante</option>
+            </select>
+          </div>
+
 
 
             <div class="text-center" >
