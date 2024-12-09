@@ -148,11 +148,12 @@ export default {
   filteredDeptosAreas() {
     // Filtrar según los filtros seleccionados
     let filtered = this.deptosareas.filter((deptoarea) => {
-      return (
-        (!this.filters.departamento || deptoarea.id_depto === this.filters.departamento) &&
-        (!this.filters.area || deptoarea.id_area === this.filters.area)
-      );
-    });
+  return (
+    (!this.filters.departamento || deptoarea.id_depto == this.filters.departamento) &&
+    (!this.filters.area || deptoarea.id_area == this.filters.area)
+  );
+});
+
 
     // Paginación
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
