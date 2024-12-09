@@ -185,58 +185,56 @@
           </div>
 
           <div class="row mt-1">
-            <!-- Condición -->
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="condicion">Condición</label>
-                <select
-                  id="condicion"
-                  v-model="formData.condicion"
-                  class="form-control"
-                  :disabled="soloLectura"
-                  required
-                >
-                  <option value="" disabled>Selecciona tipo de condición</option>
-                  <option value="Excelente">Excelente</option>
-                  <option value="Buena">Buena</option>
-                  <option value="Regular">Regular</option>
-                  <option value="Mala">Mala</option>
-                </select>
+              <!-- Condición -->
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="condicion">Condición</label>
+                  <select
+                    id="condicion"
+                    v-model="formData.condicion"
+                    class="form-control"
+                    :disabled="soloLectura"
+                    required
+                  >
+                    <option value="" disabled>Selecciona tipo de condición</option>
+                    <option value="Excelente">Excelente</option>
+                    <option value="Buena">Buena</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Mala">Mala</option>
+                  </select>
+                </div>
               </div>
-            </div>
-            <!-- Fecha de Mantenimiento -->
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="fecha_mant">Fecha de Mantenimiento</label>
-                <input
-                  type="date"
-                  id="fecha_mant"
-                  v-model="formData.fecha_mant"
-                  class="form-control"
-                  :disabled="soloLectura"
-                  required
-                />
+              <!-- Fecha de Mantenimiento -->
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="fecha_mant">Fecha de Mantenimiento</label>
+                  <input
+                    type="date"
+                    id="fecha_mant"
+                    v-model="formData.fecha_mant"
+                    class="form-control"
+                    :disabled="soloLectura"
+                    required
+                  />
+                </div>
               </div>
-            </div>
             <!-- Comentario -->
             <div class="col-md-4">
-              <div class="form-group">
-                <label for="comentario">Comentario</label>
-                <textarea
-                  id="comentario"
-                  v-model="formData.comentario"
-                  class="form-control"
-                  placeholder="Escribe un comentario"
-                  rows="3"
-                  :disabled="soloLectura"
-                  required
-                ></textarea>
+                <div class="form-group">
+                  <label for="comentario">Comentario</label>
+                  <textarea
+                    id="comentario"
+                    v-model="formData.comentario"
+                    class="form-control"
+                    placeholder="Escribe un comentario"
+                    rows="3"
+                    :disabled="soloLectura"
+                    required
+                  ></textarea>
+                </div>
               </div>
+
             </div>
-          </div>
-
-
-          
 
             <div class="text-center">
               <button type="submit" class="btn btn-success mr-2">
@@ -376,6 +374,7 @@ export default {
         accesorios: "",
         condicion: "",
         fecha_mant: "",
+        tipo_mant: "",
       },
       soloLectura: false,
       labels: {
@@ -384,6 +383,7 @@ export default {
         id_depto: "Departamento",
         id_area: "Área",
         id_catego: "Categoría",
+
       },
       filters: {
         tipoMant: "",
@@ -392,8 +392,9 @@ export default {
         numeroSerie: "",
       },
       tipoMantOptions: [ // Define las opciones de tipoMant
-      'Mantenimiento Preventivo',
-      'Mantenimiento Correctivo',
+      'Preventivo',
+      'Correctivo',
+      'Predictivo',
       // Agrega más opciones según sea necesario
     ],
     };
@@ -401,29 +402,29 @@ export default {
   },
   computed: {
   filteredMantenimientos() {
-    // Filtra los mantenimientos según los filtros
     const mantenimientosFiltrados = this.mantenimientos.filter((mantenimiento) => {
       const equipo = this.getEquiposNombre(mantenimiento.id_equipo);
       return (
         (!this.filters.tipoMant || mantenimiento.tipo_mant === this.filters.tipoMant) &&
         (!this.filters.admin || parseInt(mantenimiento.id_admin) === parseInt(this.filters.admin)) &&
         (!this.filters.agencia || mantenimiento.id_agencia === this.filters.agencia) &&
-        (!this.filters.numeroSerie || (equipo && equipo.numero_serie.includes(this.filters.numeroSerie)))
+        (!this.filters.numeroSerie || (equipo && equipo.numero_serie && equipo.numero_serie.includes(this.filters.numeroSerie)))
       );
     });
 
-    this.totalItems = mantenimientosFiltrados.length; // Total de elementos filtrados
+    this.totalItems = mantenimientosFiltrados.length;
 
-    // Paginación: aplicar paginación sobre los elementos filtrados
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     return mantenimientosFiltrados.slice(startIndex, endIndex);
   },
+
   totalPages() {
     // Calcular el total de páginas basándonos en los elementos filtrados
     return Math.ceil(this.totalItems / this.itemsPerPage);
   },
 },
+
 
 
   mounted() {
